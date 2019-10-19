@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <memory>
 
 #include "Window.hpp"
 #include "MapEntity.hpp"
@@ -15,13 +16,12 @@ class Map
 {
 public:
     Map();
-    ~Map();
     void zoom(int z);
-    void load_objects();
+    void add_entity(std::shared_ptr<MapEntity> entity_ptr);
     // Draws everything on screen
     void draw(Window& window) const;
 private:
-    std::vector<MapEntity> entities_;
+    std::vector<std::shared_ptr<MapEntity>> entities_;
     int zoom_;
 public:
     //Prevents copy assignment

@@ -5,7 +5,7 @@ namespace TrafSim
 
 Window::Window(int width, int height, const std::string &title, const sf::ContextSettings &settings)
     : window_(sf::VideoMode(width, height), title, sf::Style::Default, settings),
-      clear_color_(sf::Color::White)
+      clear_color_(sf::Color::Black)
 {
 }
 void Window::setClearColor(const sf::Color &color)

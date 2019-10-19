@@ -1,5 +1,8 @@
 #include <iostream>
+#include <memory>
+
 #include "Application.hpp"
+#include "Car.hpp"
 
 namespace TrafSim
 {
@@ -17,6 +20,7 @@ void Application::run()
     //Time since last update in milliseconds
     float lag = 0;
     Timer game_timer;
+    map_.add_entity(std::make_shared<Car>(Car()));
     
     while (window_.isOpen())
     {
@@ -30,6 +34,8 @@ void Application::run()
             tick_timer_.reset();
         }
         window_.pollEvent();
+        window_.clear();
+        map_.draw(window_);
         window_.display();
     }
 }

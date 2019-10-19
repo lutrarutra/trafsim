@@ -8,6 +8,7 @@ MapEntity::MapEntity(float lon, float lat)
 {
 }
 
+
 void MapEntity::set_loc(float lon, float lat)
 {
     loc_.set_lon(lon);

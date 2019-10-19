@@ -18,6 +18,8 @@ public:
     void draw(const sf::Shape &shape);
     void display() { window_.display(); }
     void pollEvent();
+    unsigned int get_width() { return window_.getSize().x; }
+    unsigned int get_height() { return window_.getSize().y; }
 
 private:
     sf::RenderWindow window_;
