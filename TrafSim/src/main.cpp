@@ -1,11 +1,16 @@
 #include <iostream>
-#include <cstdlib>
 
+#include "Random.h"
 #include "Application.hpp"
 
 int main(int argc, char *argv[])
 {
-    std::cout << "TrafSim running: " << argc << " " << argv[0] << std::endl;
+    if (argc > 0)
+        std::cout << "TrafSim running from: " << argv[0] << std::endl;
+
+
+    TrafSim::Random r;
+    r.distribution_test(100);
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;

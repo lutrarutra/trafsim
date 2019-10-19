@@ -69,7 +69,10 @@
                 "tuple": "cpp",
                 "type_traits": "cpp",
                 "typeinfo": "cpp",
-                "utility": "cpp"
+                "utility": "cpp",
+                "random": "cpp",
+                "fstream": "cpp",
+                "numeric": "cpp"
             }
         }
 }

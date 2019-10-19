@@ -17,7 +17,7 @@ void Application::run()
     //Time since last update in milliseconds
     float lag = 0;
     Timer game_timer;
-
+    
     while (window_.isOpen())
     {
 
