@@ -4,6 +4,7 @@
 
 #include "Window.hpp"
 #include "Timer.hpp"
+#include "Map.hpp"
 
 namespace TrafSim
 {
@@ -16,6 +17,7 @@ public:
 
 private:
     Window window_;
+    Map map_;
     Timer tick_timer_;
     //Ticks per second
     const unsigned int ticks_ps_ = 20;

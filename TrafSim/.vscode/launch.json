@@ -9,7 +9,9 @@
             "program": "${workspaceFolder}/build/a",
             "cwd": "${workspaceFolder}/build",
             "preLaunchTask": "make",
-            "args": [],
+            "args": [
+                //"../res/tammisalo.osm"
+            ],
             "internalConsoleOptions": "openOnSessionStart",
             "logging": {
                 "moduleLoad": false,

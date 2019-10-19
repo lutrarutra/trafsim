@@ -28,7 +28,7 @@ void Window::pollEvent()
         //Catch resizing
         else if (e.type == sf::Event::Resized)
         {
-            
+            std::cout << window_.getSize().x << " " << window_.getSize().y << std::endl;
         }
     }
 }
