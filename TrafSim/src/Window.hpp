@@ -17,11 +17,10 @@ public:
     void setClearColor(const sf::Color &color);
     bool isOpen() const { return window_.isOpen(); }
     void close();
-    void clear() { window_.clear(clear_color_); }
+    void clear();
     void draw(const sf::Shape &shape);
-    void display() { window_.display(); }
+    void display();
     void pollEvent();
-    void gui();
     unsigned int get_width() { return window_.getSize().x; }
     unsigned int get_height() { return window_.getSize().y; }
 

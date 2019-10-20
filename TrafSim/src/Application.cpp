@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "Application.hpp"
+#include "GUI.hpp"
 #include "Car.hpp"
 
 namespace TrafSim
@@ -35,7 +36,7 @@ void Application::run()
         }
         window_.pollEvent();
         window_.clear();
-        window_.gui();
+        GUI::color_picker();
         //map_.draw(window_);
         window_.display();
     }
