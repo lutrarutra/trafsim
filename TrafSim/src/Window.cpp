@@ -4,7 +4,7 @@ namespace TrafSim
 {
 
 Window::Window(int width, int height, const std::string &title, const sf::ContextSettings &settings)
-    : window_(sf::VideoMode(width, height), "TrafSim", sf::Style::Default, settings),
+    : window_(sf::VideoMode(width, height), title, sf::Style::Default, settings),
       clear_color_(sf::Color::Black)
 {
     window_.setVerticalSyncEnabled(true);
@@ -19,7 +19,7 @@ void Window::setClearColor(const sf::Color &color)
 void Window::clear()
 {
     ImGui::SFML::Update(window_, clock_.restart());
-    window_.clear();
+    window_.clear(clear_color_);
 }
 
 void Window::draw(const sf::Shape &shape)

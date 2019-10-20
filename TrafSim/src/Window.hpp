@@ -21,6 +21,7 @@ public:
     void draw(const sf::Shape &shape);
     void display();
     void pollEvent();
+    const sf::Color &get_clear_color() const { return clear_color_; }
     unsigned int get_width() { return window_.getSize().x; }
     unsigned int get_height() { return window_.getSize().y; }
 

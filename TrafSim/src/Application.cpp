@@ -36,8 +36,8 @@ void Application::run()
         }
         window_.pollEvent();
         window_.clear();
-        GUI::color_picker();
-        //map_.draw(window_);
+        window_.setClearColor(GUI::color_picker(window_.get_clear_color()));
+        map_.draw(window_);
         window_.display();
     }
     exit();
@@ -45,7 +45,7 @@ void Application::run()
 
 void Application::exit()
 {
-    ImGui::SFML::Shutdown(); 
+    ImGui::SFML::Shutdown();
 }
 
 } // namespace TrafSim
