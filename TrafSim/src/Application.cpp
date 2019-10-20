@@ -22,6 +22,7 @@ void Application::run()
     float lag = 0;
     Timer game_timer;
     map_.add_entity(std::make_shared<Car>(Car()));
+    std::string line = "";
 
     while (window_.isOpen())
     {
@@ -36,6 +37,7 @@ void Application::run()
         }
         window_.pollEvent();
         window_.clear();
+        line = GUI::console(line);
         window_.setClearColor(GUI::color_picker(window_.get_clear_color()));
         map_.draw(window_);
         window_.display();

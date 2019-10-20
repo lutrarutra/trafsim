@@ -25,7 +25,7 @@ public:
         color[1] = clr.g / 255.0f;
         color[2] = clr.b / 255.0f;
         color[3] = clr.a / 255.0f;
-        ImGui::Begin("Sample window");
+        ImGui::Begin("Color picker");
         ImGui::SetWindowFontScale(2.5f);
         if (ImGui::ColorEdit4("Select color", color))
         {
@@ -38,6 +38,21 @@ public:
         }
         ImGui::End();
         return clr;
+    }
+
+    static std::string console(const std::string& str)
+    {
+        char buffer[255];
+        strcpy(buffer, str.c_str());
+        ImGui::Begin("Console");
+        ImGui::SetWindowFontScale(2.5f);
+        ImGui::InputText("Console", buffer, 255);
+        if(ImGui::Button("Enter") || ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Enter)))
+        {
+            memset(buffer, 0, 255);
+        }
+        ImGui::End();
+        return std::string(buffer);
     }
 };
 
