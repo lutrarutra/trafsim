@@ -3,6 +3,7 @@
 #include "Application.hpp"
 
 
+
 int main(int argc, char *argv[])
 {
     if (argc > 0)
@@ -11,6 +12,8 @@ int main(int argc, char *argv[])
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
-    TrafSim::Application app(1280, 720, "TrafSim", settings);
+    int height = sf::VideoMode::getDesktopMode().height;
+    int width = sf::VideoMode::getDesktopMode().width;
+    TrafSim::Application app(width / 2, height / 2, "TrafSim", settings);
     app.run();
 }

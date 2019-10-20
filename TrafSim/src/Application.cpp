@@ -21,7 +21,7 @@ void Application::run()
     float lag = 0;
     Timer game_timer;
     map_.add_entity(std::make_shared<Car>(Car()));
-    
+
     while (window_.isOpen())
     {
 
@@ -35,9 +35,16 @@ void Application::run()
         }
         window_.pollEvent();
         window_.clear();
-        map_.draw(window_);
+        window_.gui();
+        //map_.draw(window_);
         window_.display();
     }
+    exit();
+}
+
+void Application::exit()
+{
+    ImGui::SFML::Shutdown(); 
 }
 
 } // namespace TrafSim

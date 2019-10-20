@@ -21,6 +21,7 @@ public:
     // Draws everything on screen
     void draw(Window& window) const;
 private:
+    //entities are stored as shared pointers in vector
     std::vector<std::shared_ptr<MapEntity>> entities_;
     int zoom_;
 public:

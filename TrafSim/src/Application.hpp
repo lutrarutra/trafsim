@@ -14,6 +14,7 @@ class Application
 public:
     Application(int width, int height, const std::string &title, const sf::ContextSettings &settings);
     void run();
+    void exit();
 
 private:
     Window window_;

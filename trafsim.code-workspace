@@ -72,7 +72,12 @@
                 "utility": "cpp",
                 "random": "cpp",
                 "fstream": "cpp",
-                "numeric": "cpp"
+                "numeric": "cpp",
+                "condition_variable": "cpp",
+                "future": "cpp",
+                "iomanip": "cpp",
+                "queue": "cpp",
+                "thread": "cpp"
             }
         }
 }
