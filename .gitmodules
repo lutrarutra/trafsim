@@ -1,0 +1,3 @@
+[submodule "TrafSim/deps/tracy"]
+	path = TrafSim/deps/tracy
+	url = https://github.com/Leandros/tracy
