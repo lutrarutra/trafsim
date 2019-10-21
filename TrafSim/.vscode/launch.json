@@ -19,7 +19,7 @@
                 "trace": false
             },
             "showDisplayString": false,
-            "externalConsole": false,
+            "externalConsole": true,
             "environment": [],
             "MIMode": "lldb",
         }

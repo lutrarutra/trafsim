@@ -7,9 +7,13 @@ Window::Window(int width, int height, const std::string &title, const sf::Contex
     : window_(sf::VideoMode(width, height), title, sf::Style::Default, settings),
       clear_color_(sf::Color::Black)
 {
-    window_.setVerticalSyncEnabled(true);
+    //If turned on, it will limit fps to 60
+    window_.setVerticalSyncEnabled(false);
     ImGui::SFML::Init(window_);
     window_.resetGLStates();
+    ImGui::SFML::Update(window_, clock_.restart());
+    ImGui::SFML::Render(window_);
+    ImGui::GetFont()->Scale = 3.0f;
 }
 void Window::setClearColor(const sf::Color &color)
 {

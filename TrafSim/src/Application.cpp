@@ -23,7 +23,8 @@ void Application::run()
     Timer game_timer;
     map_.add_entity(std::make_shared<Car>(Car()));
     std::string line = "";
-
+    Timer fps_timer;
+    unsigned int frame_counter = 0;
     while (window_.isOpen())
     {
 
@@ -35,12 +36,27 @@ void Application::run()
             lag -= tick_timer_.msFromReset<float>() - seconds_pt_;
             tick_timer_.reset();
         }
+        //Calculate and update fps each 100ms
+        if (fps_timer.msFromReset<float>() > 100)
+        {
+            float fps = 1000 * frame_counter / fps_timer.msFromReset<float>();
+            fps_array_[0] = fps;
+            for (int i = 119; i > 0; --i)
+            {
+                fps_array_[i] = fps_array_[i-1];
+            }
+            frame_counter = 0;
+            fps_timer.reset();
+        }
+
         window_.pollEvent();
         window_.clear();
-        line = GUI::console(line);
-        window_.setClearColor(GUI::color_picker(window_.get_clear_color()));
+        GUI::performance_monitor(fps_array_);
+        GUI::console(line, console_strings_);
         map_.draw(window_);
         window_.display();
+
+        frame_counter++;
     }
     exit();
 }

@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD 14)
 #set(SOURCES src/main.cpp src/Window.cpp src/Application.cpp)
 file(GLOB SOURCES src/*.cpp)
 set(IMGUI_SOURCES deps/imgui/imgui.cpp deps/imgui/imgui_widgets.cpp deps/imgui/imgui_draw.cpp deps/imgui/imgui_demo.cpp deps/imgui-sfml/imgui-SFML.cpp)
+#set(TRACY_SOURCES deps/tracy/TracyClient.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES})
 
 
@@ -35,9 +36,15 @@ if(SFML_FOUND)
     target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 endif()
 
-target_link_libraries(${PROJECT_NAME} bz2)
-target_link_libraries(${PROJECT_NAME} expat)
-target_link_libraries(${PROJECT_NAME} z)
+
+#Osmium deps libraries
+target_link_libraries(${PROJECT_NAME} bz2) #bz2lib
+target_link_libraries(${PROJECT_NAME} expat) #expatlib
+target_link_libraries(${PROJECT_NAME} z) #zlib
+
+#tracy dep libraries
+#target_link_libraries(${PROJECT_NAME} pthread) #libpthread
+#target_link_libraries(${PROJECT_NAME} dl) #libdl
 
 #OpenGL for ImGui
 find_package(OpenGL REQUIRED)
@@ -47,8 +54,11 @@ endif()
 include_directories(${OPENGL_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 
-include_directories(imgui)
-include_directories(imgui-sfml)
+
+include_directories(deps/imgui)
+include_directories(deps/imgui-sfml)
+
+#include_directories(deps/tracy)
 
 #Osmium library
 find_package(Osmium REQUIRED)
@@ -63,9 +73,6 @@ if(NOT PROTOZERO_FOUND)
     message(WARNING "Protozero not found!\n")
 endif()
 include_directories(${PROTOZERO_INCLUDE_DIRS})
-
-include_directories(deps/imgui)
-include_directories(deps/imgui-sfml)
 
 # Set "a" as output's name
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "a")

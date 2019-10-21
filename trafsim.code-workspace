@@ -77,7 +77,14 @@
                 "future": "cpp",
                 "iomanip": "cpp",
                 "queue": "cpp",
-                "thread": "cpp"
+                "thread": "cpp",
+                "list": "cpp",
+                "regex": "cpp",
+                "shared_mutex": "cpp",
+                "strstream": "cpp",
+                "typeindex": "cpp",
+                "unordered_set": "cpp",
+                "variant": "cpp"
             }
         }
 }
