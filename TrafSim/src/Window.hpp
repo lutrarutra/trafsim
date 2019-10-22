@@ -16,12 +16,12 @@ class Window
 public:
     Window(int width, int height, const std::string &title, const sf::ContextSettings &settings);
     void setClearColor(const sf::Color &color);
-    void pollEvent(void(*handler)(const sf::Event& ev));
+    void pollEvent();
     const sf::Color &get_clear_color() const { return clear_color_; }
 
     //Getters
-    unsigned int get_width() { return window_.getSize().x; }
-    unsigned int get_height() { return window_.getSize().y; }
+    unsigned int getWidth() { return window_.getSize().x; }
+    unsigned int getHeight() { return window_.getSize().y; }
     bool isOpen() const { return window_.isOpen(); }
 
     //rendering stuff

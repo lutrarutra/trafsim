@@ -11,12 +11,10 @@ namespace TrafSim
 
 // These will be only available in this file because they are private static members of Application
 Application *Application::App_Instance = nullptr;
-std::vector<sf::Keyboard::Key> Application::keys_pressed_;
-std::vector<sf::Mouse::Button> Application::btns_pressed_;
 
 // We can only have one instance of a application and it is stored
 Application::Application(int width, int height, const std::string &title, const sf::ContextSettings &settings)
-    : window_(width, height, title, settings), map_(), seconds_pt_(1000.0f / (1.0f * ticks_ps_))
+    : m_window(width, height, title, settings), m_map()
 {
     App_Instance = this;
 }
@@ -28,7 +26,7 @@ void Application::run()
     //Time since last update in milliseconds
     float lag = 0;
     Timer game_timer;
-    map_.add_entity(std::make_shared<Car>(Car()));
+    m_map.add_entity(std::make_shared<Car>(Car()));
     std::string line = "";
     Timer fps_timer;
     unsigned int frame_counter = 0;
@@ -37,20 +35,20 @@ void Application::run()
     if (!texture.loadFromFile("worldmap.png"))
         std::cout << "Could not find it" << std::endl;
 
-    sf::RectangleShape rect(sf::Vector2f(window_.get_width(), window_.get_height()));
+    sf::RectangleShape rect(sf::Vector2f(m_window.getWidth(), m_window.getHeight()));
 
     rect.setTexture(&texture);
 
-    while (window_.isOpen())
+    while (m_window.isOpen())
     {
 
         //This code will be executed on fixed time intervals
-        if (tick_timer_.msFromReset<float>() - lag > seconds_pt_)
+        if (m_tickTimer.msFromReset<float>() - lag > m_secondsPerTick)
         {
             ticks++;
             //We need to remove little lag from our timer so it won't stack it
-            lag -= tick_timer_.msFromReset<float>() - seconds_pt_;
-            tick_timer_.reset();
+            lag -= m_tickTimer.msFromReset<float>() - m_secondsPerTick;
+            m_tickTimer.reset();
         }
         //Calculate and update fps each 100ms
         if (fps_timer.msFromReset<float>() > 100)
@@ -65,13 +63,13 @@ void Application::run()
             fps_timer.reset();
         }
 
-        window_.pollEvent(HandleEvent);
-        window_.clear();
+        m_window.pollEvent();
+        m_window.clear();
         GUI::performance_monitor(fps_array_);
-        GUI::console(line, console_strings_);
-        map_.draw(window_);
-        window_.draw(rect);
-        window_.display();
+        GUI::console(line, m_console_strings);
+        m_map.draw(m_window);
+        m_window.draw(rect);
+        m_window.display();
         frame_counter++;
     }
     exit();
@@ -87,8 +85,8 @@ void Application::HandleEvent(const sf::Event &ev)
     switch (ev.type)
     {
     case sf::Event::KeyPressed:
-        if (contains(Application::keys_pressed_, ev.key.code))
-            Application::keys_pressed_.push_back(ev.key.code);
+        if (contains(m_keyBuffer, ev.key.code))
+            m_keyBuffer.push_back(ev.key.code);
         break;
     case sf::Event::KeyReleased:
         break;

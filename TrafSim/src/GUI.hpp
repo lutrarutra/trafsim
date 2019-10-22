@@ -86,7 +86,7 @@ public:
         ImGui::Text("FPS: %.f", fps_array[0]);
         int x = ImGui::GetContentRegionAvail().x;
         int y = ImGui::GetContentRegionAvail().y;
-        ImGui::PlotLines("", fps_array, 119, 0, NULL, 0, 1000, ImVec2(x, y));
+        ImGui::PlotLines("", fps_array, 119, 0, NULL, 0, 70, ImVec2(x, y));
         ImGui::End();
     }
 };

@@ -1,5 +1,7 @@
 #include "Window.hpp"
 
+#include "Application.hpp"
+
 namespace TrafSim
 {
 
@@ -55,8 +57,9 @@ void Window::display()
 }
 
 //Events
-void Window::pollEvent(void(*handler)(const sf::Event& ev))
+void Window::pollEvent()
 {
+    auto app = Application::GetInstance();
     sf::Event e;
     while (window_.pollEvent(e))
     {
@@ -79,17 +82,17 @@ void Window::pollEvent(void(*handler)(const sf::Event& ev))
         }
         //Mouse buttons
         if (e.type == sf::Event::MouseButtonPressed)
-            handler(e);
+            app->HandleEvent(e);
 
         if (e.type == sf::Event::MouseButtonPressed)
-            handler(e);
+            app->HandleEvent(e);
 
         //Keyboard keys
         if (e.type == sf::Event::KeyPressed)
-            handler(e);
+            app->HandleEvent(e);
 
         if (e.type == sf::Event::KeyReleased)
-            handler(e);
+            app->HandleEvent(e);
     }
 }
 
