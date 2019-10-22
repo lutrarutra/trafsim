@@ -8,6 +8,7 @@
 
 #include <SFML/Graphics.hpp>
 
+
 namespace TrafSim
 {
 class Window
@@ -15,17 +16,23 @@ class Window
 public:
     Window(int width, int height, const std::string &title, const sf::ContextSettings &settings);
     void setClearColor(const sf::Color &color);
-    bool isOpen() const { return window_.isOpen(); }
-    void zoom(int z);
-    void close();
-    void clear();
-    void draw(const sf::Shape &shape);
-    void display();
-    void pollEvent();
+    void pollEvent(void(*handler)(const sf::Event& ev));
     const sf::Color &get_clear_color() const { return clear_color_; }
+
+    //Getters
     unsigned int get_width() { return window_.getSize().x; }
     unsigned int get_height() { return window_.getSize().y; }
+    bool isOpen() const { return window_.isOpen(); }
 
+    //rendering stuff
+    void draw(const sf::Shape &shape);
+    void clear();
+    void display();
+    void close();
+
+private:
+    void zoomView(sf::Vector2i relative_to, float zoom);
+    
 private:
     sf::RenderWindow window_;
     sf::View map_view_;
@@ -33,6 +40,7 @@ private:
     sf::Clock clock_;
     float zoom_ = 1;
     char title_[255];
+
 };
 
 } // namespace TrafSim

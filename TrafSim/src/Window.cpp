@@ -9,7 +9,7 @@ Window::Window(int width, int height, const std::string &title, const sf::Contex
 {
     window_.setView(map_view_);
     //If turned on, it will limit fps to 60
-    window_.setVerticalSyncEnabled(false);
+    window_.setVerticalSyncEnabled(true);
     ImGui::SFML::Init(window_);
     window_.resetGLStates();
     ImGui::SFML::Update(window_, clock_.restart());
@@ -17,14 +17,18 @@ Window::Window(int width, int height, const std::string &title, const sf::Contex
     ImGui::GetFont()->Scale = 3.0f;
 }
 
-void Window::zoom(int z)
+void Window::zoomView(sf::Vector2i relative_to, float zoom_dir)
 {
-    if(z == 0)
+    if (zoom_dir == 0)
         return;
-    std::cout << z << std::endl;
+    const sf::Vector2f beforeCoord{window_.mapPixelToCoords(relative_to)};
     const float zoomfactor = 1.1f;
-    zoom_ = zoom_ * (z > 0 ? zoomfactor : 1.f / zoomfactor);
+    zoom_ = zoom_ * (zoom_dir > 0 ? zoomfactor : 1.f / zoomfactor);
     map_view_.setSize(window_.getSize().x * zoom_, window_.getSize().y * zoom_);
+    window_.setView(map_view_);
+    const sf::Vector2f afterCoord{window_.mapPixelToCoords(relative_to)};
+    const sf::Vector2f offsetCoords{beforeCoord - afterCoord};
+    map_view_.move(offsetCoords);
     window_.setView(map_view_);
 }
 
@@ -51,14 +55,16 @@ void Window::display()
 }
 
 //Events
-void Window::pollEvent()
+void Window::pollEvent(void(*handler)(const sf::Event& ev))
 {
     sf::Event e;
     while (window_.pollEvent(e))
     {
         ImGui::SFML::ProcessEvent(e);
         if (e.type == sf::Event::Closed)
-            close();
+        {
+            window_.close();
+        }
         //Catch resizing
         else if (e.type == sf::Event::Resized)
         {
@@ -69,8 +75,21 @@ void Window::pollEvent()
         }
         else if (e.type == sf::Event::MouseWheelScrolled)
         {
-            zoom(e.mouseWheelScroll.delta);
+            zoomView(sf::Vector2i(e.mouseWheelScroll.x, e.mouseWheelScroll.y), e.mouseWheelScroll.delta);
         }
+        //Mouse buttons
+        if (e.type == sf::Event::MouseButtonPressed)
+            handler(e);
+
+        if (e.type == sf::Event::MouseButtonPressed)
+            handler(e);
+
+        //Keyboard keys
+        if (e.type == sf::Event::KeyPressed)
+            handler(e);
+
+        if (e.type == sf::Event::KeyReleased)
+            handler(e);
     }
 }
 

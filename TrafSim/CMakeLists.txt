@@ -25,6 +25,7 @@ include_directories(src)
 
 # Additional resources like images and fonts
 # configure_file(res/OpenSans-Regular.ttf OpenSans-Regular.ttf COPYONLY)
+configure_file(res/worldmap.png worldmap.png COPYONLY)
 
 # Find sfml and link it
 # if you want to move sfml folder into another folder 

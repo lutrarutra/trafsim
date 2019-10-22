@@ -16,6 +16,7 @@ public:
     void run();
     void exit();
 
+
 private:
     Window window_;
     Map map_;
@@ -25,9 +26,18 @@ private:
     //Seconds per tick
     const float seconds_pt_;
     //float array initialized all elements with 0
-    float fps_array_[120] {};
+    float fps_array_[120]{};
     //console stuff
     std::vector<std::string> console_strings_;
+
+public:
+    static void HandleEvent(const sf::Event &ev);
+    static Application* GetInstance();
+private:
+    static Application* App_Instance;
+    static std::vector<sf::Keyboard::Key> keys_pressed_;
+    static std::vector<sf::Mouse::Button> btns_pressed_;
+
 };
 
 } // namespace TrafSim
