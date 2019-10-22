@@ -26,7 +26,6 @@ void Application::run()
     //Time since last update in milliseconds
     float lag = 0;
     Timer game_timer;
-    m_map.addEntity(std::make_shared<Car>(Car()));
     std::string line = "";
     Timer fps_timer;
     unsigned int frame_counter = 0;
@@ -38,6 +37,9 @@ void Application::run()
     sf::RectangleShape rect(sf::Vector2f(m_window.getWidth(), m_window.getHeight()));
 
     rect.setTexture(&texture);
+
+    //Keep track of mouse movement between each frame (delta_mouseposition)
+    sf::Vector2i delta_mp = sf::Mouse::getPosition();
 
     while (m_window.isOpen())
     {
@@ -65,12 +67,17 @@ void Application::run()
 
         m_window.pollEvent();
         m_window.clear();
+
+        //IamGui stuff
         GUI::performance_monitor(fps_array_);
         GUI::console(line, m_console_strings);
         m_map.draw(m_window);
         m_window.draw(rect);
+
         m_window.display();
         frame_counter++;
+        handleInputBuffers(fps_timer.msFromReset<float>(), delta_mp - sf::Mouse::getPosition());
+        delta_mp = sf::Mouse::getPosition();
     }
     exit();
 }
@@ -80,16 +87,38 @@ void Application::handleEvent(const sf::Event &ev)
     switch (ev.type)
     {
     case sf::Event::KeyPressed:
+        m_keyBuffer[ev.key.code] = true;
         break;
     case sf::Event::KeyReleased:
+        m_keyBuffer[ev.key.code] = false;
         break;
     case sf::Event::MouseButtonPressed:
+        m_buttonBuffer[ev.mouseButton.button] = true;
         break;
     case sf::Event::MouseButtonReleased:
+        m_buttonBuffer[ev.mouseButton.button] = false;
         break;
     default:
         break;
     }
+}
+
+void Application::handleInputBuffers(const float deltatime, const sf::Vector2i& delta_mp)
+{
+    //Arrow keys
+    if (m_keyBuffer[sf::Keyboard::Up])
+        m_window.moveView(0, deltatime);
+    if (m_keyBuffer[sf::Keyboard::Down])
+        m_window.moveView(0, -deltatime);
+    if (m_keyBuffer[sf::Keyboard::Right])
+        m_window.moveView(-deltatime, 0);
+    if (m_keyBuffer[sf::Keyboard::Left])
+        m_window.moveView(+deltatime, 0);
+    
+    //Mouse buttons
+    if(m_buttonBuffer[sf::Mouse::Middle])
+        m_window.moveViewWithMouse(delta_mp);
+
 }
 
 Application *Application::GetInstance()

@@ -17,11 +17,13 @@ public:
     Window(int width, int height, const std::string &title, const sf::ContextSettings &settings);
     void setClearColor(const sf::Color &color);
     void pollEvent();
-    const sf::Color &getClearColor() const { return m_clearColor; }
+    void moveViewWithMouse(const sf::Vector2i& delta_mp);
+    void moveView(int dx, int dy);
 
     //Getters
     unsigned int getWidth() { return m_window.getSize().x; }
     unsigned int getHeight() { return m_window.getSize().y; }
+    const sf::Color &getClearColor() const { return m_clearColor; }
     bool isOpen() const { return m_window.isOpen(); }
 
     //rendering stuff

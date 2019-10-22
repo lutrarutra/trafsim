@@ -16,6 +16,7 @@ public:
     void run();
     void exit();
     void handleEvent(const sf::Event &ev);
+    void handleInputBuffers(const float deltatime, const sf::Vector2i& delta_mp);
 
 private:
     Window m_window;
@@ -29,6 +30,11 @@ private:
     float fps_array_[120]{};
     //console stuff
     std::vector<std::string> m_console_strings;
+    sf::Vector2f m_mousePos;
+
+    //Our program can put maximum of 5 key events to boffer
+    bool m_keyBuffer[sf::Keyboard::KeyCount]{false};
+    bool m_buttonBuffer[sf::Mouse::ButtonCount]{false};
 
     //Static members
 public:

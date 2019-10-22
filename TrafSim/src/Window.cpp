@@ -19,6 +19,20 @@ Window::Window(int width, int height, const std::string &title, const sf::Contex
     ImGui::GetFont()->Scale = 3.0f;
 }
 
+void Window::moveViewWithMouse(const sf::Vector2i& delta_mp)
+{
+    //mouse coordinate
+    sf::Vector2f mc{m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window))};
+    //window center coordinate 
+    sf::Vector2f wc{m_window.mapPixelToCoords(sf::Vector2i(mc.x - m_mapView.getCenter().x, mc.y - m_mapView.getCenter().y))};
+
+    m_mapView.move(delta_mp.x * m_zoom, delta_mp.y * m_zoom);
+
+    // std::cout << mouseCoord.x << " " << mouseCoord.y << "\n";
+    // std::cout << windowCoord.x << " " << windowCoord.y << "\n";
+    m_window.setView(m_mapView);
+}
+
 void Window::zoomView(sf::Vector2i relative_to, float zoom_dir)
 {
     if (zoom_dir == 0)
@@ -56,6 +70,17 @@ void Window::display()
     m_window.display();
 }
 
+void Window::moveView(int dx, int dy)
+{
+    //Higher sensivity -> quicker moves
+    const float sensivity = 0.5f;
+    dx *= m_zoom * sensivity;
+    dy *= m_zoom * sensivity;
+    //divide dx and dy by zoom factor so when we are zoomed in it will not move so quickly
+    m_mapView.setCenter(m_mapView.getCenter().x + dx, m_mapView.getCenter().y + dy);
+    m_window.setView(m_mapView);
+}
+
 //Events
 void Window::pollEvent()
 {
@@ -84,7 +109,7 @@ void Window::pollEvent()
         else if (e.type == sf::Event::MouseButtonPressed)
             app->handleEvent(e);
 
-        else if (e.type == sf::Event::MouseButtonPressed)
+        else if (e.type == sf::Event::MouseButtonReleased)
             app->handleEvent(e);
 
         //Keyboard keys
