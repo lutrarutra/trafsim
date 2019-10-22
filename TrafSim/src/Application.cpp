@@ -10,13 +10,13 @@ namespace TrafSim
 {
 
 // These will be only available in this file because they are private static members of Application
-Application *Application::App_Instance = nullptr;
+Application *Application::S_AppInstance = nullptr;
 
 // We can only have one instance of a application and it is stored
 Application::Application(int width, int height, const std::string &title, const sf::ContextSettings &settings)
     : m_window(width, height, title, settings), m_map()
 {
-    App_Instance = this;
+    S_AppInstance = this;
 }
 
 //Main loop of the engine
@@ -80,7 +80,7 @@ bool contains(const std::vector<sf::Keyboard::Key> vec, const sf::Keyboard::Key 
     return std::find(vec.begin(), vec.end(), element) != vec.end();
 }
 
-void Application::HandleEvent(const sf::Event &ev)
+void Application::handleEvent(const sf::Event &ev)
 {
     switch (ev.type)
     {
@@ -101,7 +101,7 @@ void Application::HandleEvent(const sf::Event &ev)
 
 Application *Application::GetInstance()
 {
-    return App_Instance;
+    return S_AppInstance;
 }
 
 void Application::exit()

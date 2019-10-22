@@ -6,16 +6,16 @@ namespace TrafSim
 {
 
 Window::Window(int width, int height, const std::string &title, const sf::ContextSettings &settings)
-    : window_(sf::VideoMode(width, height), title, sf::Style::Default, settings), map_view_(sf::View(sf::FloatRect(0, 0, width, height))),
-      clear_color_(sf::Color::Black)
+    : m_window(sf::VideoMode(width, height), title, sf::Style::Default, settings), m_mapView(sf::View(sf::FloatRect(0, 0, width, height))),
+      m_clearColor(sf::Color::Black)
 {
-    window_.setView(map_view_);
+    m_window.setView(m_mapView);
     //If turned on, it will limit fps to 60
-    window_.setVerticalSyncEnabled(true);
-    ImGui::SFML::Init(window_);
-    window_.resetGLStates();
-    ImGui::SFML::Update(window_, clock_.restart());
-    ImGui::SFML::Render(window_);
+    m_window.setVerticalSyncEnabled(true);
+    ImGui::SFML::Init(m_window);
+    m_window.resetGLStates();
+    ImGui::SFML::Update(m_window, m_clock.restart());
+    ImGui::SFML::Render(m_window);
     ImGui::GetFont()->Scale = 3.0f;
 }
 
@@ -23,37 +23,37 @@ void Window::zoomView(sf::Vector2i relative_to, float zoom_dir)
 {
     if (zoom_dir == 0)
         return;
-    const sf::Vector2f beforeCoord{window_.mapPixelToCoords(relative_to)};
+    const sf::Vector2f beforeCoord{m_window.mapPixelToCoords(relative_to)};
     const float zoomfactor = 1.1f;
-    zoom_ = zoom_ * (zoom_dir > 0 ? zoomfactor : 1.f / zoomfactor);
-    map_view_.setSize(window_.getSize().x * zoom_, window_.getSize().y * zoom_);
-    window_.setView(map_view_);
-    const sf::Vector2f afterCoord{window_.mapPixelToCoords(relative_to)};
+    m_zoom = m_zoom * (zoom_dir > 0 ? zoomfactor : 1.f / zoomfactor);
+    m_mapView.setSize(m_window.getSize().x * m_zoom, m_window.getSize().y * m_zoom);
+    m_window.setView(m_mapView);
+    const sf::Vector2f afterCoord{m_window.mapPixelToCoords(relative_to)};
     const sf::Vector2f offsetCoords{beforeCoord - afterCoord};
-    map_view_.move(offsetCoords);
-    window_.setView(map_view_);
+    m_mapView.move(offsetCoords);
+    m_window.setView(m_mapView);
 }
 
 void Window::setClearColor(const sf::Color &color)
 {
-    clear_color_ = color;
+    m_clearColor = color;
 }
 
 void Window::clear()
 {
-    ImGui::SFML::Update(window_, clock_.restart());
-    window_.clear(clear_color_);
+    ImGui::SFML::Update(m_window, m_clock.restart());
+    m_window.clear(m_clearColor);
 }
 
 void Window::draw(const sf::Shape &shape)
 {
-    window_.draw(shape);
+    m_window.draw(shape);
 }
 
 void Window::display()
 {
-    ImGui::SFML::Render(window_);
-    window_.display();
+    ImGui::SFML::Render(m_window);
+    m_window.display();
 }
 
 //Events
@@ -61,20 +61,20 @@ void Window::pollEvent()
 {
     auto app = Application::GetInstance();
     sf::Event e;
-    while (window_.pollEvent(e))
+    while (m_window.pollEvent(e))
     {
         ImGui::SFML::ProcessEvent(e);
         if (e.type == sf::Event::Closed)
         {
-            window_.close();
+            m_window.close();
         }
         //Catch resizing
         else if (e.type == sf::Event::Resized)
         {
             //When window resizes it will give us larger view of our map
             //it does not change size of our entities on screen, we can just see more entities
-            map_view_ = sf::View(sf::FloatRect(0.f, 0.f, e.size.width, e.size.height));
-            window_.setView(map_view_);
+            m_mapView = sf::View(sf::FloatRect(0.f, 0.f, e.size.width, e.size.height));
+            m_window.setView(m_mapView);
         }
         else if (e.type == sf::Event::MouseWheelScrolled)
         {
@@ -82,23 +82,23 @@ void Window::pollEvent()
         }
         //Mouse buttons
         if (e.type == sf::Event::MouseButtonPressed)
-            app->HandleEvent(e);
+            app->handleEvent(e);
 
         if (e.type == sf::Event::MouseButtonPressed)
-            app->HandleEvent(e);
+            app->handleEvent(e);
 
         //Keyboard keys
         if (e.type == sf::Event::KeyPressed)
-            app->HandleEvent(e);
+            app->handleEvent(e);
 
         if (e.type == sf::Event::KeyReleased)
-            app->HandleEvent(e);
+            app->handleEvent(e);
     }
 }
 
 void Window::close()
 {
-    window_.close();
+    m_window.close();
 }
 
 } // namespace TrafSim

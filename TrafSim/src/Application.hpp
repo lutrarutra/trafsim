@@ -15,7 +15,7 @@ public:
     Application(int width, int height, const std::string &title, const sf::ContextSettings &settings);
     void run();
     void exit();
-    void HandleEvent(const sf::Event &ev);
+    void handleEvent(const sf::Event &ev);
 
 private:
     Window m_window;
@@ -37,7 +37,7 @@ public:
     static Application *GetInstance();
 
 private:
-    static Application *App_Instance;
+    static Application *S_AppInstance;
 };
 
 } // namespace TrafSim
