@@ -11,7 +11,6 @@ namespace TrafSim
 Application::Application(int width, int height, const std::string &title, const sf::ContextSettings &settings)
     : window_(width, height, title, settings), map_(), seconds_pt_(1000.0f / (1.0f * ticks_ps_))
 {
-    window_.setClearColor(sf::Color::Black);
 }
 
 //Main loop of the engine

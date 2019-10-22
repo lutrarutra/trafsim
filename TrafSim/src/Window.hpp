@@ -16,6 +16,7 @@ public:
     Window(int width, int height, const std::string &title, const sf::ContextSettings &settings);
     void setClearColor(const sf::Color &color);
     bool isOpen() const { return window_.isOpen(); }
+    void zoom(int z);
     void close();
     void clear();
     void draw(const sf::Shape &shape);
@@ -27,8 +28,10 @@ public:
 
 private:
     sf::RenderWindow window_;
+    sf::View map_view_;
     sf::Color clear_color_;
     sf::Clock clock_;
+    float zoom_ = 1;
     char title_[255];
 };
 

@@ -24,7 +24,9 @@ private:
     const unsigned int ticks_ps_ = 20;
     //Seconds per tick
     const float seconds_pt_;
+    //float array initialized all elements with 0
     float fps_array_[120] {};
+    //console stuff
     std::vector<std::string> console_strings_;
 };
 
