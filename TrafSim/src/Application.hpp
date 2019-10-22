@@ -29,8 +29,6 @@ private:
     float fps_array_[120]{};
     //console stuff
     std::vector<std::string> m_console_strings;
-    std::vector<sf::Keyboard::Key> m_keyBuffer;
-    std::vector<sf::Mouse::Button> m_buttonBuffer;
 
     //Static members
 public:

@@ -4,15 +4,15 @@ namespace TrafSim
 {
 
 MapEntity::MapEntity(float lon, float lat)
-    : loc_(lon, lat)
+    : m_loc(lon, lat)
 {
 }
 
 
-void MapEntity::set_loc(float lon, float lat)
+void MapEntity::setLoc(float lon, float lat)
 {
-    loc_.set_lon(lon);
-    loc_.set_lat(lat);
+    m_loc.set_lon(lon);
+    m_loc.set_lat(lat);
 }
 
 }; // namespace TrafSim

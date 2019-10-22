@@ -26,7 +26,7 @@ void Application::run()
     //Time since last update in milliseconds
     float lag = 0;
     Timer game_timer;
-    m_map.add_entity(std::make_shared<Car>(Car()));
+    m_map.addEntity(std::make_shared<Car>(Car()));
     std::string line = "";
     Timer fps_timer;
     unsigned int frame_counter = 0;
@@ -75,18 +75,11 @@ void Application::run()
     exit();
 }
 
-bool contains(const std::vector<sf::Keyboard::Key> vec, const sf::Keyboard::Key &element)
-{
-    return std::find(vec.begin(), vec.end(), element) != vec.end();
-}
-
 void Application::handleEvent(const sf::Event &ev)
 {
     switch (ev.type)
     {
     case sf::Event::KeyPressed:
-        if (contains(m_keyBuffer, ev.key.code))
-            m_keyBuffer.push_back(ev.key.code);
         break;
     case sf::Event::KeyReleased:
         break;

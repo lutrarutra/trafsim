@@ -81,17 +81,17 @@ void Window::pollEvent()
             zoomView(sf::Vector2i(e.mouseWheelScroll.x, e.mouseWheelScroll.y), e.mouseWheelScroll.delta);
         }
         //Mouse buttons
-        if (e.type == sf::Event::MouseButtonPressed)
+        else if (e.type == sf::Event::MouseButtonPressed)
             app->handleEvent(e);
 
-        if (e.type == sf::Event::MouseButtonPressed)
+        else if (e.type == sf::Event::MouseButtonPressed)
             app->handleEvent(e);
 
         //Keyboard keys
-        if (e.type == sf::Event::KeyPressed)
+        else if (e.type == sf::Event::KeyPressed)
             app->handleEvent(e);
 
-        if (e.type == sf::Event::KeyReleased)
+        else if (e.type == sf::Event::KeyReleased)
             app->handleEvent(e);
     }
 }
