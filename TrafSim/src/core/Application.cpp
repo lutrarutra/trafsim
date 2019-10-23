@@ -2,6 +2,7 @@
 #include <memory>
 #include <algorithm>
 
+#include "util/OsmHandler.hpp"
 #include "util/Random.hpp"
 #include "Application.hpp"
 #include "util/GUI.hpp"
@@ -22,7 +23,7 @@ Application::Application(int width, int height, const std::string &title, const 
 }
 
 //Main loop of the engine
-void Application::run()
+void Application::run(const char *argv)
 {
     unsigned int ticks = 0;
     //Time since last update in milliseconds
@@ -32,23 +33,20 @@ void Application::run()
     Timer fps_timer;
     unsigned int frame_counter = 0;
 
-    sf::Texture texture;
-    if (!texture.loadFromFile("worldmap.png"))
-        std::cout << "Could not find it" << std::endl;
+    // sf::Texture texture;
+    // if (!texture.loadFromFile("worldmap.png"))
+    //     std::cout << "Could not find it" << std::endl;
 
-    sf::RectangleShape rect(sf::Vector2f(m_window.getWidth(), m_window.getHeight()));
-    rect.setTexture(&texture);
+    // sf::RectangleShape rect(sf::Vector2f(m_window.getWidth(), m_window.getHeight()));
+    // rect.setTexture(&texture);
 
     //All this to create building
-    std::vector<sf::Vertex> *vertices = new std::vector<sf::Vertex>();
-    Random r;
+    OsmHandler osm(argv, m_window);
+    std::vector<Building*> *buildings = osm.FindBuildings();
 
-    for(int i = 0; i < 5; ++i)
-        vertices->emplace_back(sf::Vector2f((float)r.rand_int(m_window.getWidth()), (float)r.rand_int(m_window.getHeight())));
-
-
-    std::shared_ptr<Building> building = std::make_shared<Building>(vertices);
-    m_map.addEntity(building);
+    std::cout << buildings << "\n";
+    for (unsigned int i = 0; i < buildings->size(); ++i)
+        m_map.addEntity(buildings->at(i));
 
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
@@ -115,7 +113,7 @@ void Application::handleEvent(const sf::Event &ev)
     }
 }
 
-void Application::handleInputBuffers(const float deltatime, const sf::Vector2i& delta_mp)
+void Application::handleInputBuffers(const float deltatime, const sf::Vector2i &delta_mp)
 {
     //Arrow keys
     if (m_keyBuffer[sf::Keyboard::Up])
@@ -126,11 +124,10 @@ void Application::handleInputBuffers(const float deltatime, const sf::Vector2i& 
         m_window.moveView(deltatime, 0);
     if (m_keyBuffer[sf::Keyboard::Left])
         m_window.moveView(-deltatime, 0);
-    
-    //Mouse buttons
-    if(m_buttonBuffer[sf::Mouse::Middle])
-        m_window.moveViewWithMouse(delta_mp);
 
+    //Mouse buttons
+    if (m_buttonBuffer[sf::Mouse::Middle])
+        m_window.moveViewWithMouse(delta_mp);
 }
 
 Application *Application::GetInstance()

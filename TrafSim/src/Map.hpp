@@ -16,12 +16,13 @@ class Map
 {
 public:
     Map();
-    void addEntity(std::shared_ptr<MapEntity> entity_ptr);
+    ~Map();
+    void addEntity(MapEntity *entity_ptr);
     // Draws everything on screen
     void draw(Window& window) const;
 private:
     //entities are stored as shared pointers in vector
-    std::vector<std::shared_ptr<MapEntity>> m_entities;
+    std::vector<MapEntity*> m_entities;
 public:
     //Prevents copy assignment
     Map &operator=(const Map &) = delete;

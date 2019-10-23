@@ -13,7 +13,7 @@ class Application
 {
 public:
     Application(int width, int height, const std::string &title, const sf::ContextSettings &settings);
-    void run();
+    void run(const char* argv);
     void exit();
     void handleEvent(const sf::Event &ev);
     void handleInputBuffers(const float deltatime, const sf::Vector2i& delta_mp);

@@ -20,8 +20,8 @@ public:
     void moveView(int dx, int dy);
 
     //Getters
-    unsigned int getWidth() { return m_window.getSize().x; }
-    unsigned int getHeight() { return m_window.getSize().y; }
+    unsigned int getWidth() const { return m_window.getSize().x; }
+    unsigned int getHeight() const { return m_window.getSize().y; }
     const sf::Color &getClearColor() const { return m_clearColor; }
     bool isOpen() const { return m_window.isOpen(); }
 

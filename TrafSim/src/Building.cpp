@@ -15,7 +15,7 @@ void Building::draw(Window &window) const
 
 void Building::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    target.draw(&(*m_vertices)[0], m_vertices->size(), sf::TriangleStrip, states);
+    target.draw(&(*m_vertices)[0], m_vertices->size(), sf::TriangleFan, states);
 }
 
 } // namespace TrafSim

@@ -10,7 +10,7 @@
             "cwd": "${workspaceFolder}/build",
             "preLaunchTask": "make",
             "args": [
-                //"../res/tammisalo.osm"
+                "../res/tammisalo.osm"
             ],
             "internalConsoleOptions": "openOnSessionStart",
             "logging": {
