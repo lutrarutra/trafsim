@@ -23,7 +23,7 @@ sf::Vector2f OsmHandler::convert(const osmium::Location &loc) const
 struct BuildingHandler : public osmium::handler::Handler
 {
     const OsmHandler *instance;
-    std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> buildings = std::make_unique<std::vector<std::unique_ptr<MapEntity>>>();
+    unique_vector buildings = std::make_unique<std::vector<std::unique_ptr<MapEntity>>>();
     void way(const osmium::Way &way)
     {
         // Instance of class Building will be owner of this ptr thus responsible for deletion
@@ -41,9 +41,9 @@ struct BuildingHandler : public osmium::handler::Handler
     }
 };
 
-std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> OsmHandler::FindBuildings() const
+unique_vector OsmHandler::FindBuildings() const
 {
-    std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> ptr;
+    unique_vector ptr;
     using index_type = osmium::index::map::FlexMem<osmium::unsigned_object_id_type, osmium::Location>;
     using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;
     try

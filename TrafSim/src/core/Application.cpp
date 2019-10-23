@@ -44,10 +44,12 @@ void Application::run(const char *argv)
     OsmHandler osm(argv, m_window);
     {
         PerformanceTimer p;
-        auto a = osm.FindBuildings();
+        
+        unique_vector a = osm.FindBuildings();
         m_map.addEntities(a);
         // With unique pointers it took us 157ms
     }
+
 
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();

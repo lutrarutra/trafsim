@@ -37,11 +37,13 @@
 
 namespace TrafSim
 {
+
+typedef std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> unique_vector;
 class OsmHandler
 {
 public:
     OsmHandler(const std::string &osmfilePath, const Window& window);
-    std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> FindBuildings() const;
+    unique_vector FindBuildings() const;
     sf::Vector2f convert(const osmium::Location &loc) const;
 private:
 private:
