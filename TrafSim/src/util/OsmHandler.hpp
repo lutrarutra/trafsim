@@ -41,7 +41,7 @@ class OsmHandler
 {
 public:
     OsmHandler(const std::string &osmfilePath, const Window& window);
-    std::vector<Building*>* FindBuildings() const;
+    std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> FindBuildings() const;
     sf::Vector2f convert(const osmium::Location &loc) const;
 private:
 private:

@@ -1,9 +1,11 @@
 #pragma once
 
 #include <chrono>
+#include <iostream>
 
 namespace TrafSim
 {
+
 class Timer
 {
 public:
@@ -22,4 +24,18 @@ public:
 private:
     std::chrono::time_point<std::chrono::steady_clock> m_start;
 };
+
+// This will be for measuring performance
+class PerformanceTimer : public Timer
+{
+public:
+    PerformanceTimer() : Timer()
+    {
+    }
+    ~PerformanceTimer()
+    {
+        std::cout << msFromReset<float>() << "\n";
+    }
+};
+
 } // namespace TrafSim

@@ -17,12 +17,13 @@ class Map
 public:
     Map();
     ~Map();
-    void addEntity(MapEntity *entity_ptr);
+    void addEntity(std::unique_ptr<MapEntity> &entity_ptr);
+    void addEntities(std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> &entities);
     // Draws everything on screen
     void draw(Window& window) const;
 private:
     //entities are stored as shared pointers in vector
-    std::vector<MapEntity*> m_entities;
+    std::vector<std::unique_ptr<MapEntity>> m_entities;
 public:
     //Prevents copy assignment
     Map &operator=(const Map &) = delete;

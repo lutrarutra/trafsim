@@ -23,27 +23,27 @@ sf::Vector2f OsmHandler::convert(const osmium::Location &loc) const
 struct BuildingHandler : public osmium::handler::Handler
 {
     const OsmHandler *instance;
-    std::vector<Building*> *buildings = new std::vector<Building*>();
+    std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> buildings = std::make_unique<std::vector<std::unique_ptr<MapEntity>>>();
     void way(const osmium::Way &way)
     {
         // Instance of class Building will be owner of this ptr thus responsible for deletion
-        std::vector<sf::Vertex> *vertices = new std::vector<sf::Vertex>();
         const char *tag = way.tags()["building"];
         if (tag)
         {
+            std::unique_ptr<std::vector<sf::Vertex>> vertices = std::make_unique<std::vector<sf::Vertex>>();
             vertices->reserve(way.nodes().size());
             for (const auto &node : way.nodes())
             {
-                vertices->push_back(sf::Vector2f(instance->convert(node.location())));
+                vertices->emplace_back(sf::Vector2f(instance->convert(node.location())));
             }
+            buildings->emplace_back(new Building(vertices));
         }
-        buildings->push_back(new Building(vertices));
     }
 };
 
-std::vector<Building*> *OsmHandler::FindBuildings() const
+std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> OsmHandler::FindBuildings() const
 {
-    std::vector<Building*> *ptr;
+    std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> ptr;
     using index_type = osmium::index::map::FlexMem<osmium::unsigned_object_id_type, osmium::Location>;
     using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;
     try
@@ -56,7 +56,7 @@ std::vector<Building*> *OsmHandler::FindBuildings() const
         BuildingHandler buildingHandler;
         buildingHandler.instance = this;
         osmium::apply(reader, location_handler, buildingHandler);
-        ptr = buildingHandler.buildings;
+        ptr.swap(buildingHandler.buildings);
         std::cout << ptr << "\n";
         std::cout << buildingHandler.buildings << "\n";
     }

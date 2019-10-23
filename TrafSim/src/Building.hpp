@@ -14,6 +14,7 @@ class Building : public MapEntity, public sf::Drawable
 public:
     //Makes unique pointer from parameter and stores it
     Building(std::vector<sf::Vertex> *vertices);
+    Building(std::unique_ptr<std::vector<sf::Vertex>> &vertices);
     virtual void draw(Window& window) const;
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

@@ -8,6 +8,11 @@ Building::Building(std::vector<sf::Vertex> *node_ptr)
     m_vertices.reset(node_ptr);
 }
 
+Building::Building(std::unique_ptr<std::vector<sf::Vertex>> &vertices)
+{
+    m_vertices.swap(vertices);
+}
+
 void Building::draw(Window &window) const
 {
     window.draw(*this);

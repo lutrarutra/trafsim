@@ -42,11 +42,12 @@ void Application::run(const char *argv)
 
     //All this to create building
     OsmHandler osm(argv, m_window);
-    std::vector<Building*> *buildings = osm.FindBuildings();
-
-    std::cout << buildings << "\n";
-    for (unsigned int i = 0; i < buildings->size(); ++i)
-        m_map.addEntity(buildings->at(i));
+    {
+        PerformanceTimer p;
+        auto a = osm.FindBuildings();
+        m_map.addEntities(a);
+        // With unique pointers it took us 157ms
+    }
 
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
