@@ -4,19 +4,19 @@ namespace TrafSim
 {
 
 Car::Car(float lon, float lat)
-    : MapEntity(lon, lat), rect_(sf::Vector2f(10.0f, 10.0f))
+    : MapEntity(lon, lat), m_rect(sf::Vector2f(10.0f, 10.0f))
 {
-    rect_.setPosition(300, 300);
+    m_rect.setPosition(300, 300);
 }
 
-void Car::scale(float scale)
+void Car::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    rect_.setScale(scale, scale);
+    target.draw(m_rect, states);
 }
 
-void Car::draw(Window &window_) const
+void Car::draw(Window &window) const
 {
-    window_.draw(rect_);
+    window.draw(*this);
 }
 
 }; // namespace TrafSim

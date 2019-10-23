@@ -107,13 +107,13 @@ void Application::handleInputBuffers(const float deltatime, const sf::Vector2i& 
 {
     //Arrow keys
     if (m_keyBuffer[sf::Keyboard::Up])
-        m_window.moveView(0, deltatime);
-    if (m_keyBuffer[sf::Keyboard::Down])
         m_window.moveView(0, -deltatime);
+    if (m_keyBuffer[sf::Keyboard::Down])
+        m_window.moveView(0, deltatime);
     if (m_keyBuffer[sf::Keyboard::Right])
-        m_window.moveView(-deltatime, 0);
+        m_window.moveView(deltatime, 0);
     if (m_keyBuffer[sf::Keyboard::Left])
-        m_window.moveView(+deltatime, 0);
+        m_window.moveView(-deltatime, 0);
     
     //Mouse buttons
     if(m_buttonBuffer[sf::Mouse::Middle])

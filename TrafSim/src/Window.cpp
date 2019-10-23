@@ -21,15 +21,7 @@ Window::Window(int width, int height, const std::string &title, const sf::Contex
 
 void Window::moveViewWithMouse(const sf::Vector2i& delta_mp)
 {
-    //mouse coordinate
-    sf::Vector2f mc{m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window))};
-    //window center coordinate 
-    sf::Vector2f wc{m_window.mapPixelToCoords(sf::Vector2i(mc.x - m_mapView.getCenter().x, mc.y - m_mapView.getCenter().y))};
-
     m_mapView.move(delta_mp.x * m_zoom, delta_mp.y * m_zoom);
-
-    // std::cout << mouseCoord.x << " " << mouseCoord.y << "\n";
-    // std::cout << windowCoord.x << " " << windowCoord.y << "\n";
     m_window.setView(m_mapView);
 }
 
@@ -39,7 +31,7 @@ void Window::zoomView(sf::Vector2i relative_to, float zoom_dir)
         return;
     const sf::Vector2f beforeCoord{m_window.mapPixelToCoords(relative_to)};
     const float zoomfactor = 1.1f;
-    m_zoom = m_zoom * (zoom_dir > 0 ? zoomfactor : 1.f / zoomfactor);
+    m_zoom = m_zoom * (zoom_dir < 0 ? zoomfactor : 1.f / zoomfactor);
     m_mapView.setSize(m_window.getSize().x * m_zoom, m_window.getSize().y * m_zoom);
     m_window.setView(m_mapView);
     const sf::Vector2f afterCoord{m_window.mapPixelToCoords(relative_to)};
@@ -59,7 +51,7 @@ void Window::clear()
     m_window.clear(m_clearColor);
 }
 
-void Window::draw(const sf::Shape &shape)
+void Window::draw(const sf::Drawable &shape)
 {
     m_window.draw(shape);
 }
