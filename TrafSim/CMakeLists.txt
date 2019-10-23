@@ -12,9 +12,11 @@ set(CMAKE_CXX_STANDARD 14)
 # All .cpp-files
 #set(SOURCES src/main.cpp src/Window.cpp src/Application.cpp)
 file(GLOB SOURCES src/*.cpp)
+file(GLOB CORE src/core/*.cpp)
+file(GLOB UTILS src/util/*.cpp)
 set(IMGUI_SOURCES deps/imgui/imgui.cpp deps/imgui/imgui_widgets.cpp deps/imgui/imgui_draw.cpp deps/imgui/imgui_demo.cpp deps/imgui-sfml/imgui-SFML.cpp)
 #set(TRACY_SOURCES deps/tracy/TracyClient.cpp)
-add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} ${CORE} ${UTILS} ${IMGUI_SOURCES})
 
 
 # Enable additional warnings and debug mode
@@ -22,6 +24,8 @@ set (CMAKE_CXX_FLAGS "-g -W -pedantic")
 
 #folder with your header (.h) files
 include_directories(src)
+include_directories(src/core)
+include_directories(src/util)
 
 # Additional resources like images and fonts
 # configure_file(res/OpenSans-Regular.ttf OpenSans-Regular.ttf COPYONLY)

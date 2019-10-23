@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "Window.hpp"
+#include "core/Window.hpp"
 #include "MapEntity.hpp"
 
 namespace TrafSim

@@ -14,6 +14,7 @@ void Road::draw(Window &window) const
 
 void Road::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
+    // TODO - how to store vertices of the road?
     //target.draw(?, states);
 }
 

@@ -2,7 +2,7 @@
 
 #include <osmium/osm/location.hpp>
 
-#include "Window.hpp"
+#include "core/Window.hpp"
 
 namespace TrafSim
 {

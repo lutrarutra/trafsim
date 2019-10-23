@@ -2,9 +2,11 @@
 #include <memory>
 #include <algorithm>
 
+#include "util/Random.hpp"
 #include "Application.hpp"
-#include "GUI.hpp"
+#include "util/GUI.hpp"
 #include "Car.hpp"
+#include "Building.hpp"
 
 namespace TrafSim
 {
@@ -35,8 +37,18 @@ void Application::run()
         std::cout << "Could not find it" << std::endl;
 
     sf::RectangleShape rect(sf::Vector2f(m_window.getWidth(), m_window.getHeight()));
-
     rect.setTexture(&texture);
+
+    //All this to create building
+    std::vector<sf::Vertex> *vertices = new std::vector<sf::Vertex>();
+    Random r;
+
+    for(int i = 0; i < 5; ++i)
+        vertices->emplace_back(sf::Vector2f((float)r.rand_int(m_window.getWidth()), (float)r.rand_int(m_window.getHeight())));
+
+
+    std::shared_ptr<Building> building = std::make_shared<Building>(vertices);
+    m_map.addEntity(building);
 
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
@@ -72,7 +84,7 @@ void Application::run()
         GUI::performance_monitor(fps_array_);
         GUI::console(line, m_console_strings);
         m_map.draw(m_window);
-        m_window.draw(rect);
+        //m_window.draw(rect);
 
         m_window.display();
         frame_counter++;
