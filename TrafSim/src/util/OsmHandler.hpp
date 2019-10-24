@@ -27,8 +27,8 @@
 
 #include <SFML/Graphics/Vertex.hpp>
 
-#include "core/Window.hpp"
-#include "Building.hpp"
+#include "trafsim/MapEntity.hpp"
+#include "trafsim/Building.hpp"
 
 #define MINLON 25.0439000
 #define MAXLAT 60.1962000
@@ -38,12 +38,11 @@
 namespace TrafSim
 {
 
-typedef std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> unique_vector;
 class OsmHandler
 {
 public:
     OsmHandler(const std::string &osmfilePath, const Window& window);
-    unique_vector FindBuildings() const;
+    void FindBuildings(unique_vector &buildings) const;
     sf::Vector2f convert(const osmium::Location &loc) const;
 private:
 private:

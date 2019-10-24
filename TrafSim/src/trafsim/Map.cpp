@@ -13,10 +13,10 @@ Map::~Map()
     //     delete ptr;
 }
 
-void Map::addEntities(std::unique_ptr<std::vector<std::unique_ptr<MapEntity>>> &entities)
+void Map::addEntities(std::vector<std::unique_ptr<MapEntity>> &entities)
 {
-    for(int i = 0; i < entities->size(); ++i)
-        addEntity((*entities)[i]);
+    for(int i = 0; i < entities.size(); ++i)
+        addEntity(entities[i]);
 }
 
 void Map::addEntity(std::unique_ptr<MapEntity> &entity_ptr)

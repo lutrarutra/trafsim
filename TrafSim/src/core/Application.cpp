@@ -2,12 +2,10 @@
 #include <memory>
 #include <algorithm>
 
-#include "util/OsmHandler.hpp"
-#include "util/Random.hpp"
 #include "Application.hpp"
+#include "trafsim/MapEntity.hpp"
 #include "util/GUI.hpp"
-#include "Car.hpp"
-#include "Building.hpp"
+#include "util/OsmHandler.hpp"
 
 namespace TrafSim
 {
@@ -17,7 +15,7 @@ Application *Application::S_AppInstance = nullptr;
 
 // We can only have one instance of a application and it is stored
 Application::Application(int width, int height, const std::string &title, const sf::ContextSettings &settings)
-    : m_window(width, height, title, settings), m_map()
+    : m_window(width, height, title, settings)
 {
     S_AppInstance = this;
 }
@@ -29,8 +27,8 @@ void Application::run(const char *argv)
     //Time since last update in milliseconds
     float lag = 0;
     Timer game_timer;
-    std::string line = "";
     Timer fps_timer;
+    std::string line = "";
     unsigned int frame_counter = 0;
 
     // sf::Texture texture;
@@ -41,15 +39,14 @@ void Application::run(const char *argv)
     // rect.setTexture(&texture);
 
     //All this to create building
+    unique_vector a = unique_vector();
     OsmHandler osm(argv, m_window);
     {
         PerformanceTimer p;
-        
-        unique_vector a = osm.FindBuildings();
+        osm.FindBuildings(a);
         m_map.addEntities(a);
         // With unique pointers it took us 157ms
     }
-
 
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();

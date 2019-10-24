@@ -2,9 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Window.hpp"
-#include "Timer.hpp"
-#include "Map.hpp"
+#include "trafsim/Map.hpp"
+#include "util/Timer.hpp"
 
 namespace TrafSim
 {

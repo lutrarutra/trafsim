@@ -23,7 +23,8 @@ sf::Vector2f OsmHandler::convert(const osmium::Location &loc) const
 struct BuildingHandler : public osmium::handler::Handler
 {
     const OsmHandler *instance;
-    unique_vector buildings = std::make_unique<std::vector<std::unique_ptr<MapEntity>>>();
+    unique_vector *buildings;
+
     void way(const osmium::Way &way)
     {
         // Instance of class Building will be owner of this ptr thus responsible for deletion
@@ -36,14 +37,14 @@ struct BuildingHandler : public osmium::handler::Handler
             {
                 vertices->emplace_back(sf::Vector2f(instance->convert(node.location())));
             }
-            buildings->emplace_back(new Building(vertices));
+            buildings->push_back(std::make_unique<Building>(vertices));
         }
     }
 };
 
-unique_vector OsmHandler::FindBuildings() const
+//Takes reference to initialized MapEntity vector
+void OsmHandler::FindBuildings(unique_vector &buildings) const
 {
-    unique_vector ptr;
     using index_type = osmium::index::map::FlexMem<osmium::unsigned_object_id_type, osmium::Location>;
     using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;
     try
@@ -55,16 +56,14 @@ unique_vector OsmHandler::FindBuildings() const
 
         BuildingHandler buildingHandler;
         buildingHandler.instance = this;
+        buildingHandler.buildings = &buildings;
+
         osmium::apply(reader, location_handler, buildingHandler);
-        ptr.swap(buildingHandler.buildings);
-        std::cout << ptr << "\n";
-        std::cout << buildingHandler.buildings << "\n";
     }
     catch (const std::exception &e)
     {
         std::cerr << e.what() << "\n";
     }
-    return ptr;
 }
 
 } // namespace TrafSim

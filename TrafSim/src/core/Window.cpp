@@ -1,6 +1,7 @@
 #include "Window.hpp"
 
 #include "Application.hpp"
+#include "GUI.hpp"
 
 namespace TrafSim
 {
