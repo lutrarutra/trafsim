@@ -12,6 +12,9 @@
 
 namespace TrafSim
 {
+//Because it is static it will be only visible in this file
+//Kinda like a private
+static float fps_lim = 0;
 
 //Static class we can create our windows here
 class GUI
@@ -78,15 +81,23 @@ public:
     }
 
     //Store fps values of last minute (one fps value, half a second)
-
     static void performance_monitor(const float *fps_array)
     {
+        if(fps_lim < fps_array[0])
+            fps_lim = (fps_array[0]) * 1.1f;
         char buffer[255];
         ImGui::Begin("Performance monitor");
         ImGui::Text("FPS: %.f", fps_array[0]);
         int x = ImGui::GetContentRegionAvail().x;
         int y = ImGui::GetContentRegionAvail().y;
-        ImGui::PlotLines("", fps_array, 119, 0, NULL, 0, 70, ImVec2(x, y));
+        ImGui::PlotLines("", fps_array, 119, 0, NULL, 0, fps_lim, ImVec2(x, y));
+        ImGui::End();
+    }
+
+    static void progress_bar(const float progress, const char* name)
+    {
+        ImGui::Begin(name);
+        ImGui::ProgressBar(progress);
         ImGui::End();
     }
 };

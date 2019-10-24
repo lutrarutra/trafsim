@@ -1,16 +1,14 @@
 #pragma once
 
-#include "MapEntity.hpp"
+#include "DrawableEntity.hpp"
 
 namespace TrafSim
 {
-class Road : public MapEntity, public sf::Drawable
+class Road : public DrawableEntity
 {
 public:
-    Road();
-    virtual void draw(Window& window) const;
-private:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-private:
+    //Takes ownership of vertices
+    Road(std::unique_ptr<std::vector<sf::Vertex>> &vertices);
+
 };
 } // namespace TrafSim

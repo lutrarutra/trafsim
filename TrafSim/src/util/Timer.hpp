@@ -29,13 +29,16 @@ private:
 class PerformanceTimer : public Timer
 {
 public:
-    PerformanceTimer() : Timer()
+    PerformanceTimer(const char *name = "Timer") : Timer(), m_name(name)
     {
     }
     ~PerformanceTimer()
     {
-        std::cout << msFromReset<float>() << "\n";
+        std::cout << m_name << ": took: " << msFromReset<double>() << "ms\n";
     }
+
+private:
+    const char* m_name;
 };
 
 } // namespace TrafSim

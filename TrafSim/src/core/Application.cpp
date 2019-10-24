@@ -79,6 +79,7 @@ void Application::run(const char *argv)
         m_window.clear();
 
         //IamGui stuff
+        //GUI::progress_bar(0.5f, "Loading progress..");
         GUI::performance_monitor(fps_array_);
         GUI::console(line, m_console_strings);
         m_map.draw(m_window);

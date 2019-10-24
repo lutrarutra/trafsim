@@ -84,7 +84,8 @@
                 "strstream": "cpp",
                 "typeindex": "cpp",
                 "unordered_set": "cpp",
-                "variant": "cpp"
+                "variant": "cpp",
+                "__functional_03": "cpp"
             }
         }
 }

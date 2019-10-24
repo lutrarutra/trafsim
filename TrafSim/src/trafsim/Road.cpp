@@ -3,19 +3,9 @@
 namespace TrafSim
 {
 
-Road::Road()
+Road::Road(std::unique_ptr<std::vector<sf::Vertex>> &vertices) : DrawableEntity(vertices)
 {
 }
 
-void Road::draw(Window &window) const
-{
-    window.draw(*this);
-}
-
-void Road::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    // TODO - how to store vertices of the road?
-    //target.draw(?, states);
-}
 
 } // namespace TrafSim
