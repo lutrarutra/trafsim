@@ -43,7 +43,7 @@ void Application::run(const char *argv)
     OsmHandler osm(argv, m_window);
     {
         PerformanceTimer p;
-        osm.FindBuildings(a);
+        osm.FindEntities(a);
         m_map.addEntities(a);
         // With unique pointers it took us 157ms
     }
@@ -127,7 +127,7 @@ void Application::handleInputBuffers(const float deltatime, const sf::Vector2i &
         m_window.moveView(-deltatime, 0);
 
     //Mouse buttons
-    if (m_buttonBuffer[sf::Mouse::Middle])
+    if (m_buttonBuffer[sf::Mouse::Left])
         m_window.moveViewWithMouse(delta_mp);
 }
 

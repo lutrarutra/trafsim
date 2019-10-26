@@ -28,8 +28,9 @@ struct BuildingHandler : public osmium::handler::Handler
     void way(const osmium::Way &way)
     {
         // Instance of class Building will be owner of this ptr thus responsible for deletion
-        const char *tag = way.tags()["building"];
-        if (tag)
+        const char *buildingTag = way.tags()["building"];
+        const char *roadTag = way.tags()["highway"];
+        if (buildingTag)
         {
             std::unique_ptr<std::vector<sf::Vertex>> vertices = std::make_unique<std::vector<sf::Vertex>>();
             vertices->reserve(way.nodes().size());
@@ -39,11 +40,24 @@ struct BuildingHandler : public osmium::handler::Handler
             }
             buildings->push_back(std::make_unique<Building>(vertices));
         }
+        else if (roadTag && (strcmp(roadTag, "primary") == 0 || strcmp(roadTag, "secondary") == 0 || strcmp(roadTag, "tertiary") == 0 || strcmp(roadTag, "residential") == 0))
+        {
+            std::unique_ptr<std::vector<unsigned long long>> refs = std::make_unique<std::vector<unsigned long long>>();
+            refs->reserve(way.nodes().size());
+            //Road::s_RoadNodes->reserve(way.nodes().size());
+            for (const auto &node : way.nodes())
+            {
+                auto it = Road::s_RoadNodes->find(node.ref());
+                (*Road::s_RoadNodes)[node.ref()] = instance->convert(node.location());
+                refs->push_back(node.ref());
+            }
+            buildings->push_back(std::make_unique<Road>(refs));
+        }
     }
 };
 
 //Takes reference to initialized MapEntity vector
-void OsmHandler::FindBuildings(unique_vector &buildings) const
+void OsmHandler::FindEntities(unique_vector &buildings) const
 {
     using index_type = osmium::index::map::FlexMem<osmium::unsigned_object_id_type, osmium::Location>;
     using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;

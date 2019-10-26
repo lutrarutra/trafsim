@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream> //std::cerr std::cout
 #include <memory>
+#include <unordered_map>
 
 //This file is partially copied from https://github.com/osmcode/libosmium examples
 //But modified to suit for my usage
@@ -29,6 +30,7 @@
 
 #include "trafsim/MapEntity.hpp"
 #include "trafsim/Building.hpp"
+#include "trafsim/Road.hpp"
 
 #define MINLON 25.0439000
 #define MAXLAT 60.1962000
@@ -42,7 +44,7 @@ class OsmHandler
 {
 public:
     OsmHandler(const std::string &osmfilePath, const Window& window);
-    void FindBuildings(unique_vector &buildings) const;
+    void FindEntities(unique_vector &buildings) const;
     sf::Vector2f convert(const osmium::Location &loc) const;
 private:
 private:
