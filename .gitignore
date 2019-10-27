@@ -1,7 +1,6 @@
 #build folder
 build/
 
-*.osm
 *.DS_Store
 # Prerequisites
 *.d
@@ -35,3 +34,4 @@ build/
 *.exe
 *.out
 *.app
+
