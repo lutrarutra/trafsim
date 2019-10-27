@@ -1,5 +1,8 @@
 #build folder
 build/
+
+*.osm
+*.DS_Store
 # Prerequisites
 *.d
 

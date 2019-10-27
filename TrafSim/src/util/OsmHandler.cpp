@@ -4,6 +4,8 @@
 //But modified to suit for my usage
 //All credits to them.
 
+#include <osmium/util/progress_bar.hpp>
+
 #include <algorithm>
 
 namespace TrafSim
@@ -92,6 +94,14 @@ void OsmHandler::FindEntities(unique_vector &entities) const
 
         //Store entities
         entityHandler.entities = &entities;
+        // osmium::ProgressBar progress{reader.file_size(), osmium::isatty(2)};
+        // while (osmium::memory::Buffer buffer = reader.read())
+        // {
+        //     // Update progress bar for each buffer.
+        //     progress.update(reader.offset());
+        // }
+        // // Progress bar is done.
+        // progress.done();
 
         osmium::apply(reader, location_handler, entityHandler);
         //To store all the nodes... TODO - Do we need this?
@@ -105,6 +115,8 @@ void OsmHandler::FindEntities(unique_vector &entities) const
         std::vector<unsigned long long> used_refs;
 
         //First node
+        if (refs->size() < 1)
+            return;
         roadNodes.push_back(std::make_shared<RoadNode>(RoadNode((*refs)[0], (*entityHandler.road_id_map)[(*refs)[0]])));
         used_refs.push_back((*refs)[0]);
         std::shared_ptr<RoadNode> previous_node = roadNodes[0];
@@ -131,8 +143,8 @@ void OsmHandler::FindEntities(unique_vector &entities) const
             else
             {
                 //Check if this new node will be unique
-                const auto duplicate_ref = std::find(used_refs.begin(), used_refs.end(), (*refs)[i]);
-                if (duplicate_ref == used_refs.end())
+                //const auto duplicate_ref = std::find(used_refs.begin(), used_refs.end(), (*refs)[i]);
+                if (true)
                 {
                     // Add New node
                     std::shared_ptr<RoadNode> new_node = std::make_shared<RoadNode>(RoadNode((*refs)[i], (*entityHandler.road_id_map)[(*refs)[i]], previous_node));
@@ -142,18 +154,21 @@ void OsmHandler::FindEntities(unique_vector &entities) const
                     roadNodes.push_back(new_node);
                     previous_node = new_node;
                 }
-                else
-                {
-                    const auto node = std::find_if(roadNodes.begin(), roadNodes.end(), [duplicate_ref](const std::shared_ptr<RoadNode> another) {
-                        return another->getRef() == *duplicate_ref;
-                    });
-                    previous_node->connect(*node);
-                }
+                // else
+                // {
+                //     const auto node = std::find_if(roadNodes.begin(), roadNodes.end(), [duplicate_ref](const std::shared_ptr<RoadNode> another) {
+                //         return another->getRef() == *duplicate_ref;
+                //     });
+                //     previous_node->connect(*node);
+                // }
+                std::cout << ((double)i / (1.0 * refs->size())) << "\n";
             }
         }
         //Push back road system
-        std::cout << roadNodes.size() << "\n";
+        //std::cout << roadNodes.size() << "\n";
         entities.push_back(std::make_unique<RoadSystem>(roadNodes, entityHandler.roads));
+
+        //reader.close();
     }
     catch (const std::exception &e)
     {
