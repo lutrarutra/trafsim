@@ -96,6 +96,15 @@ void OsmHandler::FindEntities(unique_vector &entities) const
 
         //Store entities
         entityHandler.entities = &entities;
+        std::cout << "Reading data from file: " << m_osmfile << "\n";
+        // osmium::ProgressBar p1(reader.file_size(), true);
+        // std::cout << "Filesize: " << reader.file_size() / pow(10, 6) << "mb" << "\n";
+        // osmium::memory::Buffer buffer = reader.read();
+        // while(reader.read())
+        // {
+        //     p1.update(reader.offset());
+        // }
+        // p1.done();
 
         osmium::apply(reader, location_handler, entityHandler);
 
@@ -113,15 +122,16 @@ void OsmHandler::FindEntities(unique_vector &entities) const
         if (refs.size() < 1)
             return;
 
+        osmium::ProgressBar p2(refs.size(), true);
         std::shared_ptr<RoadNode> previous_node = nullptr;
         for (unsigned int i = 0; i < refs.size(); ++i)
         {
+            p2.update(i);
             // 0 means new road
             unsigned long long current_reference = refs[i];
             if (current_reference == 0)
             {
                 previous_node = nullptr;
-                std::cout << (float)i / refs.size() << "\n";
             }
             else
             {
@@ -144,10 +154,14 @@ void OsmHandler::FindEntities(unique_vector &entities) const
                 }
             }
         }
+        p2.done();
         //Push back road system
         std::cout << "Nodes: " << roadNodes.size() << "\n";
         std::cout << "Vertices " << entityHandler.road_vertices.size() << "\n";
         entities.push_back(std::make_unique<RoadSystem>(roadNodes, entityHandler.road_vertices));
+        used_refs.clear();
+        refs.clear();
+        entityHandler.road_id_map.clear();
         //reader.close();
     }
     catch (const std::exception &e)

@@ -11,8 +11,9 @@ namespace TrafSim
 class RoadSystem : public DrawableEntity
 {
 public:
-    RoadSystem(std::vector<std::shared_ptr<RoadNode>> &nodes, std::vector<sf::Vertex> &vertices) : DrawableEntity(vertices, sf::Lines){ m_nodes = std::move(nodes);};
+    RoadSystem(std::vector<std::shared_ptr<RoadNode>> &nodes, std::vector<sf::Vertex> &vertices) : DrawableEntity(vertices, sf::Lines) { m_nodes = std::move(nodes); };
     const std::shared_ptr<RoadNode> closestNode(const sf::Vector2f loc) const;
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
 private:
     std::vector<std::shared_ptr<RoadNode>> m_nodes;

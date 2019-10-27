@@ -4,6 +4,7 @@
 
 namespace TrafSim
 {
+
 const std::shared_ptr<RoadNode> RoadSystem::closestNode(const sf::Vector2f loc) const
 {
     std::shared_ptr<RoadNode> closest = m_nodes[0];
@@ -20,12 +21,14 @@ const std::shared_ptr<RoadNode> RoadSystem::closestNode(const sf::Vector2f loc) 
     return closest;
 }
 
-// void RoadSystem::draw(Window &window) const
-// {
-//     for (const auto &road : m_roads)
-//     {
-//         window.draw(road);
-//     }
-// }
+
+void RoadSystem::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    //PerformanceTimer p;
+    //Now it's faster to draw std::vector<sf::Vertex> instread of sf::VertexBuffer
+    target.draw(&m_vertices[0], m_vertices.size(), sf::Lines, states);
+}
+
+
 
 } // namespace TrafSim
