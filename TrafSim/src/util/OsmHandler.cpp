@@ -33,13 +33,12 @@ private:
     const OsmHandler *const m_instance;
 
 public:
-    unique_vector *entities;
+    std::vector<std::unique_ptr<MapEntity>> *entities;
     //Temporary, so we can access roads with just refs
-    std::unique_ptr<std::unordered_map<unsigned long long, sf::Vector2f>> road_id_map = std::make_unique<std::unordered_map<unsigned long long, sf::Vector2f>>();
+    std::unordered_map<unsigned long long, sf::Vector2f> road_id_map;
     //temporary, to store roads as refs
-    std::unique_ptr<std::vector<unsigned long long>> road_refs = std::make_unique<std::vector<unsigned long long>>();
-    //To draw roads
-    std::unique_ptr<std::vector<Road>> roads = std::make_unique<std::vector<Road>>();
+    std::vector<unsigned long long> road_refs;
+    std::vector<sf::Vertex> road_vertices;
 
     void way(const osmium::Way &way)
     {
@@ -49,31 +48,34 @@ public:
 
         if (buildingTag)
         {
-            std::unique_ptr<std::vector<sf::Vertex>> vertices = std::make_unique<std::vector<sf::Vertex>>();
-            vertices->reserve(way.nodes().size());
+            std::vector<sf::Vertex> vertices;
+            vertices.reserve(way.nodes().size());
             for (const auto &node : way.nodes())
             {
-                vertices->emplace_back(sf::Vector2f(m_instance->convert(node.location())));
+                vertices.emplace_back(sf::Vector2f(m_instance->convert(node.location())));
             }
             entities->push_back(std::make_unique<Building>(vertices));
         }
         else if (roadTag && (strcmp(roadTag, "primary") == 0 || strcmp(roadTag, "secondary") == 0 || strcmp(roadTag, "tertiary") == 0 || strcmp(roadTag, "residential") == 0))
         {
             //So we can store vertices and give them to Road's constructor
-            std::unique_ptr<std::vector<sf::Vertex>> road_vertices = std::make_unique<std::vector<sf::Vertex>>();
-            road_vertices->reserve(way.nodes().size());
-            road_refs->reserve(way.nodes().size());
-            road_id_map->reserve(way.nodes().size() + 1);
+            road_vertices.reserve(way.nodes().size());
+            road_refs.reserve(way.nodes().size());
+            road_id_map.reserve(way.nodes().size() + 1);
+            sf::Vector2f prev = sf::Vector2f(0, 0);
+
             for (const auto &node : way.nodes())
             {
-                auto it = road_id_map->find(node.ref());
-                (*road_id_map)[node.ref()] = m_instance->convert(node.location());
-                road_refs->push_back(node.ref());
-                road_vertices->emplace_back(m_instance->convert(node.location()));
+                road_id_map[node.ref()] = m_instance->convert(node.location());
+                road_refs.push_back(node.ref());
+                if (!(prev.x == 0 && prev.y == 0))
+                {
+                    road_vertices.emplace_back(prev);
+                    road_vertices.emplace_back(m_instance->convert(node.location()));
+                }
+                prev = m_instance->convert(node.location());
             }
-            //new road
-            road_refs->push_back(0);
-            roads->emplace_back(road_vertices);
+            road_refs.push_back(0);
         }
     }
 };
@@ -94,80 +96,59 @@ void OsmHandler::FindEntities(unique_vector &entities) const
 
         //Store entities
         entityHandler.entities = &entities;
-        // osmium::ProgressBar progress{reader.file_size(), osmium::isatty(2)};
-        // while (osmium::memory::Buffer buffer = reader.read())
-        // {
-        //     // Update progress bar for each buffer.
-        //     progress.update(reader.offset());
-        // }
-        // // Progress bar is done.
-        // progress.done();
 
         osmium::apply(reader, location_handler, entityHandler);
+
+        std::cout << "VERTICES:" << entityHandler.counter << "\n";
         //To store all the nodes... TODO - Do we need this?
         std::vector<std::shared_ptr<RoadNode>> roadNodes;
 
         //To make it cleaner to acces elements stored in entityHandler.road_refs
-        std::unique_ptr<std::vector<unsigned long long>> refs = std::make_unique<std::vector<unsigned long long>>();
-        refs.swap(entityHandler.road_refs);
+        std::vector<unsigned long long> refs;
+        refs = std::move(entityHandler.road_refs);
 
         //Temporary, to store all used references so we can combine duplicate nodes into one node
-        std::vector<unsigned long long> used_refs;
+        std::map<unsigned long long, std::shared_ptr<RoadNode>> used_refs;
 
         //First node
-        if (refs->size() < 1)
+        if (refs.size() < 1)
             return;
-        roadNodes.push_back(std::make_shared<RoadNode>(RoadNode((*refs)[0], (*entityHandler.road_id_map)[(*refs)[0]])));
-        used_refs.push_back((*refs)[0]);
-        std::shared_ptr<RoadNode> previous_node = roadNodes[0];
 
-        for (unsigned int i = 1; i < refs->size(); ++i)
+        std::shared_ptr<RoadNode> previous_node = nullptr;
+        for (unsigned int i = 0; i < refs.size(); ++i)
         {
             // 0 means new road
-            if ((*refs)[i] == 0)
+            unsigned long long current_reference = refs[i];
+            if (current_reference == 0)
             {
-                if (std::find(used_refs.begin(), used_refs.end(), (*refs)[i - 1]) == used_refs.end())
-                {
-                    //First node of
-                    roadNodes.push_back(std::make_shared<RoadNode>(RoadNode((*refs)[i - 1], (*entityHandler.road_id_map)[(*refs)[i - 1]])));
-                    used_refs.push_back((*refs)[i - 1]);
-                }
-                if (std::find(used_refs.begin(), used_refs.end(), (*refs)[i]) == used_refs.end())
-                {
-                    //Second node
-                    roadNodes.push_back(std::make_shared<RoadNode>(RoadNode((*refs)[i], (*entityHandler.road_id_map)[(*refs)[i]], roadNodes[i - 1])));
-                    used_refs.push_back((*refs)[i]);
-                    previous_node = roadNodes[i];
-                }
+                previous_node = nullptr;
+                std::cout << (float)i / refs.size() << "\n";
             }
             else
             {
-                //Check if this new node will be unique
-                //const auto duplicate_ref = std::find(used_refs.begin(), used_refs.end(), (*refs)[i]);
-                if (true)
+                if (auto duplicate = used_refs.find(current_reference); duplicate != used_refs.end())
                 {
-                    // Add New node
-                    std::shared_ptr<RoadNode> new_node = std::make_shared<RoadNode>(RoadNode((*refs)[i], (*entityHandler.road_id_map)[(*refs)[i]], previous_node));
-                    used_refs.push_back((*refs)[i]);
-                    // Connect with previous node
-                    previous_node->connect(new_node);
+                    //It is duplicate
+                    if (previous_node != nullptr)
+                        previous_node->connect(duplicate->second);
+                    previous_node = duplicate->second;
+                }
+                else
+                {
+                    //Its unique
+                    auto new_node = std::make_shared<RoadNode>(RoadNode(current_reference, entityHandler.road_id_map[current_reference]));
                     roadNodes.push_back(new_node);
+                    if (previous_node != nullptr)
+                        previous_node->connect(new_node);
+                    used_refs[current_reference] = new_node;
                     previous_node = new_node;
                 }
-                // else
-                // {
-                //     const auto node = std::find_if(roadNodes.begin(), roadNodes.end(), [duplicate_ref](const std::shared_ptr<RoadNode> another) {
-                //         return another->getRef() == *duplicate_ref;
-                //     });
-                //     previous_node->connect(*node);
-                // }
-                std::cout << ((double)i / (1.0 * refs->size())) << "\n";
             }
         }
         //Push back road system
-        //std::cout << roadNodes.size() << "\n";
-        entities.push_back(std::make_unique<RoadSystem>(roadNodes, entityHandler.roads));
-
+        std::cout << "Nodes: " << roadNodes.size() << "\n";
+        std::cout << "Vertices " << entityHandler.road_vertices.size() << "\n";
+        entities.push_back(std::make_unique<RoadSystem>(roadNodes, entityHandler.road_vertices));
         //reader.close();
     }
     catch (const std::exception &e)

@@ -11,7 +11,7 @@ class Road : public DrawableEntity
 {
 public:
     //Takes ownership of vertices
-    Road(std::unique_ptr<std::vector<sf::Vertex>> &vertices);
+    Road(std::vector<sf::Vertex> &verticies) : DrawableEntity(verticies, sf::LineStrip){};
     
 };
 } // namespace TrafSim

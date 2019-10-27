@@ -13,8 +13,7 @@ class Building : public DrawableEntity
 {
 public:
     //Takes ownership of vertices
-    Building(std::unique_ptr<std::vector<sf::Vertex>> &vertices);
-
+    Building(std::vector<sf::Vertex> &verticies) : DrawableEntity(verticies, sf::LineStrip){};
 private:
 
 };

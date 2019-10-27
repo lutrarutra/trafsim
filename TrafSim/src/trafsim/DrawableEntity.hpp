@@ -8,8 +8,8 @@ class DrawableEntity : public MapEntity, public sf::Drawable
 {
 public:
     //Takes ownership of vertices
-    DrawableEntity() : m_vertices(std::make_unique<std::vector<sf::Vertex>>()) {};
-    DrawableEntity(std::unique_ptr<std::vector<sf::Vertex>> &vertices);
+    DrawableEntity(){};
+    DrawableEntity(std::vector<sf::Vertex> &vertices, sf::PrimitiveType type);
     virtual void draw(Window &window) const;
     
 private:
@@ -17,7 +17,7 @@ private:
 
 protected:
     //Building will have it's corners specified with osmium::Nodes
-    std::unique_ptr<std::vector<sf::Vertex>> m_vertices;
+    std::vector<sf::Vertex> m_vertices;
     sf::VertexBuffer m_buffer;
 };
 } // namespace TrafSim
