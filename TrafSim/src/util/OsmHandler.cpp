@@ -20,12 +20,21 @@ sf::Vector2f OsmHandler::convert(const osmium::Location &loc) const
 }
 
 //This will handle data from .osm file
-struct EntityHander : public osmium::handler::Handler
+struct EntityHandler : public osmium::handler::Handler
 {
-    const OsmHandler *instance;
+public:
+    EntityHandler(const OsmHandler *instance) : m_instance(instance){};
+
+private:
+    const OsmHandler *const m_instance;
+
+public:
     unique_vector *entities;
+    //Temporary, so we can access roads with just refs
     std::unique_ptr<std::unordered_map<unsigned long long, sf::Vector2f>> road_id_map = std::make_unique<std::unordered_map<unsigned long long, sf::Vector2f>>();
+    //temporary, to store roads as refs
     std::unique_ptr<std::vector<unsigned long long>> road_refs = std::make_unique<std::vector<unsigned long long>>();
+    //To draw roads
     std::unique_ptr<std::vector<Road>> roads = std::make_unique<std::vector<Road>>();
 
     void way(const osmium::Way &way)
@@ -40,7 +49,7 @@ struct EntityHander : public osmium::handler::Handler
             vertices->reserve(way.nodes().size());
             for (const auto &node : way.nodes())
             {
-                vertices->emplace_back(sf::Vector2f(instance->convert(node.location())));
+                vertices->emplace_back(sf::Vector2f(m_instance->convert(node.location())));
             }
             entities->push_back(std::make_unique<Building>(vertices));
         }
@@ -53,9 +62,9 @@ struct EntityHander : public osmium::handler::Handler
             for (const auto &node : way.nodes())
             {
                 auto it = road_id_map->find(node.ref());
-                (*road_id_map)[node.ref()] = instance->convert(node.location());
+                (*road_id_map)[node.ref()] = m_instance->convert(node.location());
                 road_refs->push_back(node.ref());
-                road_vertices->emplace_back(instance->convert(node.location()));
+                road_vertices->emplace_back(m_instance->convert(node.location()));
             }
             //new road
             road_refs->push_back(0);
@@ -76,11 +85,13 @@ void OsmHandler::FindEntities(unique_vector &entities) const
         index_type index;
         location_handler_type location_handler{index};
 
-        EntityHander entityHandler;
-        entityHandler.instance = this;
+        EntityHandler entityHandler(this);
+
+        //Store entities
         entityHandler.entities = &entities;
 
         osmium::apply(reader, location_handler, entityHandler);
+        //To store all the nodes... TODO - Do we need this?
         std::unique_ptr<std::vector<RoadNode>> roadNodes = std::make_unique<std::vector<RoadNode>>();
 
         //To make it cleaner to acces elements stored in entityHandler.road_refs
@@ -117,6 +128,7 @@ void OsmHandler::FindEntities(unique_vector &entities) const
                 }
             }
         }
+        //Push back road system
         entities.push_back(std::make_unique<RoadSystem>(roadNodes, entityHandler.roads));
     }
     catch (const std::exception &e)

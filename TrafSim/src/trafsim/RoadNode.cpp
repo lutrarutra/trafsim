@@ -17,6 +17,11 @@ RoadNode::RoadNode(unsigned long long ref, const sf::Vector2f loc, RoadNode &pre
     connect(previous);
 }
 
+float RoadNode::distanceToPoint(const sf::Vector2f &point) const
+{
+    return sqrt(pow(point.x - m_loc.x, 2) + pow(point.y - m_loc.y, 2));
+}
+
 sf::Vector2f RoadNode::getLocation() const
 {
     return m_loc;
