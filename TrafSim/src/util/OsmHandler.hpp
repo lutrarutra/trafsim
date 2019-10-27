@@ -31,6 +31,7 @@
 #include "trafsim/MapEntity.hpp"
 #include "trafsim/Building.hpp"
 #include "trafsim/Road.hpp"
+#include "trafsim/RoadSystem.hpp"
 
 #define MINLON 25.0439000
 #define MAXLAT 60.1962000
@@ -44,7 +45,7 @@ class OsmHandler
 {
 public:
     OsmHandler(const std::string &osmfilePath, const Window& window);
-    void FindEntities(unique_vector &buildings) const;
+    void FindEntities(unique_vector &entities) const;
     sf::Vector2f convert(const osmium::Location &loc) const;
 private:
 private:

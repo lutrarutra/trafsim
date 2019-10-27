@@ -8,7 +8,7 @@ class DrawableEntity : public MapEntity, public sf::Drawable
 {
 public:
     //Takes ownership of vertices
-    DrawableEntity(){};
+    DrawableEntity() : m_vertices(std::make_unique<std::vector<sf::Vertex>>()) {};
     DrawableEntity(std::unique_ptr<std::vector<sf::Vertex>> &vertices);
     virtual void draw(Window &window) const;
     
