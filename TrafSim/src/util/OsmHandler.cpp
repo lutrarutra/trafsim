@@ -99,7 +99,6 @@ void OsmHandler::FindEntities(unique_vector &entities) const
 
         osmium::apply(reader, location_handler, entityHandler);
 
-        std::cout << "VERTICES:" << entityHandler.counter << "\n";
         //To store all the nodes... TODO - Do we need this?
         std::vector<std::shared_ptr<RoadNode>> roadNodes;
 
