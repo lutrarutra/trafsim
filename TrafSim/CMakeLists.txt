@@ -9,6 +9,11 @@ project(${ProjectId})
 # Specify c++ version
 set(CMAKE_CXX_STANDARD 14)
 
+# if (NOT MSVC)
+#     target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=undefined,address)
+#     target_link_libraries(${PROJECT_NAME} asan ubsan)
+# endif()
+
 # All .cpp-files
 #set(SOURCES src/main.cpp src/Window.cpp src/Application.cpp)
 file(GLOB SOURCES src/*.cpp)

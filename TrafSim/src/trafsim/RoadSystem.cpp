@@ -5,26 +5,26 @@
 namespace TrafSim
 {
 
-RoadSystem::RoadSystem(std::unique_ptr<std::vector<RoadNode>> &nodes, std::unique_ptr<std::vector<Road>> &roads)
-    : m_nodes(nullptr), m_roads(nullptr)
+RoadSystem::RoadSystem(std::vector<std::shared_ptr<RoadNode>> &nodes, std::unique_ptr<std::vector<Road>> &roads)
+    : m_roads(nullptr)
 {
-    nodes.swap(m_nodes);
+    m_nodes = std::move(nodes);
     roads.swap(m_roads);
     //1185 nodes from tammisalo.osm
     //std::cout << m_nodes->size() << "\n";
 }
 
-const RoadNode *RoadSystem::closestNode(const sf::Vector2f loc) const
+const std::shared_ptr<RoadNode> RoadSystem::closestNode(const sf::Vector2f loc) const
 {
-    const RoadNode *closest = &(*m_nodes)[0];
+    std::shared_ptr<RoadNode> closest = m_nodes[0];
     float distance = __FLT_MAX__;
-    for (const auto &node : *m_nodes)
+    for (const auto node : m_nodes)
     {
-        float dist = node.distanceToPoint(loc);
+        float dist = node->distanceToPoint(loc);
         if (distance > dist)
         {
             distance = dist;
-            closest = &node;
+            closest = node;
         }
     }
     return closest;

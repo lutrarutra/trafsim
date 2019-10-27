@@ -11,10 +11,10 @@ RoadNode::RoadNode(unsigned long long ref, const sf::Vector2f loc)
 {
 }
 
-RoadNode::RoadNode(unsigned long long ref, const sf::Vector2f loc, RoadNode &previous)
+RoadNode::RoadNode(unsigned long long ref, const sf::Vector2f loc, std::shared_ptr<RoadNode> &another)
     : m_ref(ref), m_loc(loc)
 {
-    connect(previous);
+    connect(another);
 }
 
 float RoadNode::distanceToPoint(const sf::Vector2f &point) const
@@ -27,21 +27,19 @@ sf::Vector2f RoadNode::getLocation() const
     return m_loc;
 }
 
-void RoadNode::connect(RoadNode &another_node)
+void RoadNode::connect(std::shared_ptr<RoadNode> &another)
 {
     //Check if we have duplicate
-    //TODO - is this necessary?
-    if (std::find(m_connections.begin(), m_connections.end(), &another_node) == m_connections.end())
-        m_connections.push_back(&another_node);
-    if (std::find(another_node.m_connections.begin(), another_node.m_connections.end(), this) == another_node.m_connections.end())
-        another_node.m_connections.push_back(this);
+    //TODO - is duplicate pair possible to be pushed here?
+    m_neighbors.push_back(another);
+    another->m_neighbors.push_back(std::make_unique<RoadNode>(*this));
 }
 
-float RoadNode::DistanceBetween(const RoadNode &node1, const RoadNode &node2)
-{
-    sf::Vector2f v1 = node1.getLocation();
-    sf::Vector2f v2 = node2.getLocation();
-    return sqrt(pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2));
-}
+// float RoadNode::DistanceBetween(const RoadNode &node1, const RoadNode &node2)
+// {
+//     sf::Vector2f v1 = node1.getLocation();
+//     sf::Vector2f v2 = node2.getLocation();
+//     return sqrt(pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2));
+// }
 
 } // namespace TrafSim
