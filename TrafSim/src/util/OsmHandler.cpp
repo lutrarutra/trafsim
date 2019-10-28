@@ -135,7 +135,8 @@ void OsmHandler::FindEntities(unique_vector &entities) const
             }
             else
             {
-                if (auto duplicate = used_refs.find(current_reference); duplicate != used_refs.end())
+                auto duplicate = used_refs.find(current_reference);
+                if (duplicate != used_refs.end())
                 {
                     //It is duplicate
                     if (previous_node != nullptr)
