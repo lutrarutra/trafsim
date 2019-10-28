@@ -58,7 +58,7 @@ public:
             }
             //entities->push_back(std::make_unique<Building>(vertices));
             std::unique_ptr<MapEntity> building;
-            if (m_window.isVisible(vertices[vertices.size() - 1].position))
+            if (m_window.isVisible(vertices[vertices.size() - 1].position, 1.5f))
                 building = std::make_unique<Building>(vertices, true);
             else
                 building = std::make_unique<Building>(vertices, false);
@@ -123,7 +123,7 @@ void OsmHandler::FindEntities(Map &map) const
             if (current_reference == 0)
             {
                 std::unique_ptr<MapEntity> road;
-                if (m_window.isVisible(previous_node->getLocation()))
+                if (m_window.isVisible(previous_node->getLocation(), 1.5f))
                     road = std::make_unique<Road>(road_nodes, true);
                 else
                     road = std::make_unique<Road>(road_nodes, false);

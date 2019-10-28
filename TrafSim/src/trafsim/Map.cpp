@@ -9,20 +9,33 @@ Map::Map()
 
 Map::~Map()
 {
+    if (running)
+        t.join();
 }
 
-void Map::showVisible(const Window& window)
+void Map::checkVisible(const Window &window)
 {
-    for(auto& entity : m_entities)
+    running = true;
+    for (auto &entity : m_entities)
     {
-        if(entity)
+        if (entity)
             entity->showVisible(window);
     }
 }
 
+void Map::showVisible(const Window &window)
+{
+    if (running)
+    {
+        t.join();
+        running = false;
+    }
+    t = std::thread(&Map::checkVisible, std::ref(*this), std::ref(window));
+}
+
 void Map::addEntities(std::vector<std::unique_ptr<MapEntity>> &entities)
 {
-    for(int i = 0; i < entities.size(); ++i)
+    for (unsigned int i = 0; i < entities.size(); ++i)
         addEntity(entities[i]);
 }
 
@@ -36,7 +49,7 @@ void Map::draw(Window &window) const
 {
     for (const auto &entity : m_entities)
     {
-        if(entity)
+        if (entity)
             entity->draw(window);
     }
 }

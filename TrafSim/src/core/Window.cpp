@@ -41,10 +41,14 @@ void Window::zoomView(sf::Vector2i relative_to, float zoom_dir)
     m_window.setView(m_mapView);
 }
 
-bool Window::isVisible(const sf::Vector2f &point) const
+bool Window::isVisible(const sf::Vector2f &point, float offscreen) const
 {
     sf::Vector2i convertedPoint = convert(point);
-    return (convertedPoint.x > 0 && convertedPoint.x < getWidth() && convertedPoint.y > 0 && convertedPoint.y < getHeight());
+    const int minx = getWidth() * (1 - offscreen);
+    const int miny = getHeight() * (1 - offscreen);
+    const int maxx = getWidth() * offscreen;
+    const int maxy = getHeight() * offscreen;
+    return (convertedPoint.x > minx && convertedPoint.x < maxx && convertedPoint.y > miny && convertedPoint.y < maxy);
 }
 
 void Window::setClearColor(const sf::Color &color)

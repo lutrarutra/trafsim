@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <memory>
+#include <thread>
+
 
 #include "core/Window.hpp"
 #include "MapEntity.hpp"
@@ -22,13 +24,17 @@ public:
     // Draws everything on screen
     void draw(Window& window) const;
 private:
+    void checkVisible(const Window &window);
     //entities are stored as shared pointers in vector
     std::vector<std::unique_ptr<MapEntity>> m_entities;
+    bool running = false;
+
 public:
     //Prevents copy assignment
     Map &operator=(const Map &) = delete;
     //Prevents copying or deletes copy constructor
     Map(const Map &) = delete;
+    std::thread t;
 };
 
 }; // namespace TrafSim

@@ -24,7 +24,7 @@ void DrawableEntity::showVisible(const Window &window)
     {
         if (m_type == sf::Lines)
         {
-            if (window.isVisible(m_vertices[i].position))
+            if (window.isVisible(m_vertices[i].position, 1.5f))
             {
                 m_visible_vertices.push_back(m_vertices[i]);
                 m_visible_vertices.push_back(m_vertices[i + 1]);
@@ -33,7 +33,7 @@ void DrawableEntity::showVisible(const Window &window)
         }
         else
         {
-            if (window.isVisible(m_vertices[i].position))
+            if (window.isVisible(m_vertices[i].position, 1.5f))
             {
                 m_visible_vertices.push_back(m_vertices[i]);
             }
