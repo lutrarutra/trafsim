@@ -22,6 +22,7 @@ public:
     const sf::Color &getClearColor() const { return m_clearColor; }
     bool isOpen() const { return m_window.isOpen(); }
     sf::Vector2i convert(const sf::Vector2f &point) const { return m_window.mapCoordsToPixel(point);}
+    bool isVisible(const sf::Vector2f &point) const;
 
     //rendering stuff
     void draw(const sf::Drawable &obj);

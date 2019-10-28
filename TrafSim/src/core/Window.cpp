@@ -20,7 +20,7 @@ Window::Window(int width, int height, const std::string &title, const sf::Contex
     ImGui::GetFont()->Scale = 3.0f;
 }
 
-void Window::moveViewWithMouse(const sf::Vector2i& delta_mp)
+void Window::moveViewWithMouse(const sf::Vector2i &delta_mp)
 {
     m_mapView.move(delta_mp.x * m_zoom, delta_mp.y * m_zoom);
     m_window.setView(m_mapView);
@@ -39,6 +39,12 @@ void Window::zoomView(sf::Vector2i relative_to, float zoom_dir)
     const sf::Vector2f offsetCoords{beforeCoord - afterCoord};
     m_mapView.move(offsetCoords);
     m_window.setView(m_mapView);
+}
+
+bool Window::isVisible(const sf::Vector2f &point) const
+{
+    sf::Vector2i convertedPoint = convert(point);
+    return (convertedPoint.x > 0 && convertedPoint.x < getWidth() && convertedPoint.y > 0 && convertedPoint.y < getHeight());
 }
 
 void Window::setClearColor(const sf::Color &color)

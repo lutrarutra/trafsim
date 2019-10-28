@@ -9,15 +9,14 @@ Map::Map()
 
 Map::~Map()
 {
-    // for(auto ptr : m_entities)
-    //     delete ptr;
 }
 
 void Map::showVisible(const Window& window)
 {
     for(auto& entity : m_entities)
     {
-        entity->showVisible(window);
+        if(entity)
+            entity->showVisible(window);
     }
 }
 
@@ -37,7 +36,8 @@ void Map::draw(Window &window) const
 {
     for (const auto &entity : m_entities)
     {
-        entity->draw(window);
+        if(entity)
+            entity->draw(window);
     }
 }
 

@@ -3,9 +3,11 @@
 namespace TrafSim
 {
 
-DrawableEntity::DrawableEntity(std::vector<sf::Vertex> &vertices, const sf::PrimitiveType type) : m_type(type)
+DrawableEntity::DrawableEntity(std::vector<sf::Vertex> &vertices, const sf::PrimitiveType type, bool visible) : m_type(type)
 {
     m_vertices = std::move(vertices);
+    if(visible)
+        m_visible_vertices = std::vector<sf::Vertex>(m_vertices);
 }
 
 void DrawableEntity::draw(Window &window) const
@@ -20,20 +22,18 @@ void DrawableEntity::showVisible(const Window &window)
     const int y = window.getHeight();
     for (unsigned int i = 0; i < m_vertices.size(); i)
     {
-        // std::cout << window.convert(m_vertices[i].position).x << " " << window.convert(m_vertices[i].position).y << "\n";
-        sf::Vector2i convertedPoint = window.convert(m_vertices[i].position);
         if (m_type == sf::Lines)
         {
-            if (convertedPoint.x > 0 && convertedPoint.x < x && convertedPoint.y > 0 && convertedPoint.y < y)
+            if (window.isVisible(m_vertices[i].position))
             {
                 m_visible_vertices.push_back(m_vertices[i]);
-                m_visible_vertices.push_back(m_vertices[i+1]);
+                m_visible_vertices.push_back(m_vertices[i + 1]);
             }
             i += 2;
         }
         else
         {
-            if (convertedPoint.x > 0 && convertedPoint.x < x && convertedPoint.y > 0 && convertedPoint.y < y)
+            if (window.isVisible(m_vertices[i].position))
             {
                 m_visible_vertices.push_back(m_vertices[i]);
             }

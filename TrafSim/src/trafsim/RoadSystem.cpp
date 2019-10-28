@@ -7,20 +7,25 @@ namespace TrafSim
 
 const std::shared_ptr<RoadNode> RoadSystem::closestNode(const sf::Vector2f loc) const
 {
-    std::shared_ptr<RoadNode> closest = m_nodes[0];
-    float distance = __FLT_MAX__;
-    for (const auto node : m_nodes)
-    {
-        float dist = node->distanceToPoint(loc);
-        if (distance > dist)
-        {
-            distance = dist;
-            closest = node;
-        }
-    }
+    std::shared_ptr<RoadNode> closest = m_roads[0]->getNodes()[0];
+    // float distance = __FLT_MAX__;
+    // for (const auto &road : m_roads)
+    // {
+    //     float dist1 = road->getLine().m_start->distanceToPoint(loc);
+    //     float dist2 = road->getLine().m_end->distanceToPoint(loc);
+    //     if (distance > dist1)
+    //     {
+    //         distance = dist1;
+    //         closest = road->getLine().m_start;
+    //     }
+    //     if (distance > dist2)
+    //     {
+    //         distance = dist2;
+    //         closest = road->getLine().m_end;
+    //     }
+    // }
     return closest;
 }
-
 
 // void RoadSystem::draw(sf::RenderTarget &target, sf::RenderStates states) const
 // {

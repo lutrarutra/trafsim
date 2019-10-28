@@ -8,8 +8,8 @@ class DrawableEntity : public MapEntity, public sf::Drawable
 {
 public:
     //Takes ownership of vertices
-    DrawableEntity() : m_type(sf::Lines){};
-    DrawableEntity(std::vector<sf::Vertex> &vertices, const sf::PrimitiveType type);
+    DrawableEntity() : m_type(sf::LineStrip){};
+    DrawableEntity(std::vector<sf::Vertex> &vertices, const sf::PrimitiveType type, bool visible);
     virtual void draw(Window &window) const;
     virtual void showVisible(const Window &window);
 private:

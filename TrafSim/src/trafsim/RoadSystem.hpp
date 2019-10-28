@@ -2,21 +2,21 @@
 
 #include <unordered_map>
 
-#include "trafsim/RoadNode.hpp"
+#include "trafsim/Road.hpp"
 #include "trafsim/DrawableEntity.hpp"
 
 namespace TrafSim
 {
 
-class RoadSystem : public DrawableEntity
+class RoadSystem
 {
 public:
-    RoadSystem(std::vector<std::shared_ptr<RoadNode>> &nodes, std::vector<sf::Vertex> &vertices) : DrawableEntity(vertices, sf::Lines) { m_nodes = std::move(nodes); };
+    RoadSystem(std::vector<std::shared_ptr<Road>> &roads) { m_roads = std::move(roads); };
     const std::shared_ptr<RoadNode> closestNode(const sf::Vector2f loc) const;
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
 private:
-    std::vector<std::shared_ptr<RoadNode>> m_nodes;
+    std::vector<std::shared_ptr<Road>> m_roads;
 };
 
 } // namespace TrafSim

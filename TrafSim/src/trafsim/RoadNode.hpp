@@ -3,8 +3,6 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "trafsim/Road.hpp"
-
 namespace TrafSim
 {
 class RoadNode

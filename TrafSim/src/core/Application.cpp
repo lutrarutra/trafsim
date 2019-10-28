@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <thread>
 
 #include "Application.hpp"
 #include "trafsim/MapEntity.hpp"
@@ -31,22 +32,8 @@ void Application::run(const char *argv)
     std::string line = "";
     unsigned int frame_counter = 0;
 
-    // sf::Texture texture;
-    // if (!texture.loadFromFile("worldmap.png"))
-    //     std::cout << "Could not find it" << std::endl;
-
-    // sf::RectangleShape rect(sf::Vector2f(m_window.getWidth(), m_window.getHeight()));
-    // rect.setTexture(&texture);
-
-    //All this to create building
-    unique_vector a = unique_vector();
     OsmHandler osm(argv, m_window);
-    {
-        PerformanceTimer p;
-        osm.FindEntities(a);
-        m_map.addEntities(a);
-        // With unique pointers it took us 157ms
-    }
+    std::thread reader_thread(&OsmHandler::FindEntities, &osm, std::ref(m_map));
 
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
@@ -83,7 +70,6 @@ void Application::run(const char *argv)
         GUI::performance_monitor(fps_array_);
         GUI::console(line, m_console_strings);
         m_map.draw(m_window);
-        //m_window.draw(rect);
 
         m_window.display();
         frame_counter++;
@@ -91,6 +77,7 @@ void Application::run(const char *argv)
         delta_mp = sf::Mouse::getPosition();
     }
     exit();
+    reader_thread.join();
 }
 
 void Application::handleEvent(const sf::Event &ev)
@@ -107,7 +94,7 @@ void Application::handleEvent(const sf::Event &ev)
         m_buttonBuffer[ev.mouseButton.button] = true;
         break;
     case sf::Event::MouseButtonReleased:
-        if(ev.mouseButton.button == sf::Mouse::Left)
+        if (ev.mouseButton.button == sf::Mouse::Left)
             m_map.showVisible(m_window);
         m_buttonBuffer[ev.mouseButton.button] = false;
         break;

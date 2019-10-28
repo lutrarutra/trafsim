@@ -17,5 +17,4 @@ public:
 
 private:
 };
-typedef std::vector<std::unique_ptr<MapEntity>> unique_vector;
 }; // namespace TrafSim
