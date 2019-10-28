@@ -107,6 +107,8 @@ void Application::handleEvent(const sf::Event &ev)
         m_buttonBuffer[ev.mouseButton.button] = true;
         break;
     case sf::Event::MouseButtonReleased:
+        if(ev.mouseButton.button == sf::Mouse::Left)
+            m_map.showVisible(m_window);
         m_buttonBuffer[ev.mouseButton.button] = false;
         break;
     default:

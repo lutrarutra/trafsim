@@ -22,11 +22,11 @@ const std::shared_ptr<RoadNode> RoadSystem::closestNode(const sf::Vector2f loc) 
 }
 
 
-void RoadSystem::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    //PerformanceTimer p;
-    //Now it's faster to draw std::vector<sf::Vertex> instread of sf::VertexBuffer
-    target.draw(&m_vertices[0], m_vertices.size(), sf::Lines, states);
-}
+// void RoadSystem::draw(sf::RenderTarget &target, sf::RenderStates states) const
+// {
+//     //PerformanceTimer p;
+//     //Now it's faster to draw std::vector<sf::Vertex> instread of sf::VertexBuffer
+//     target.draw(&m_vertices[0], m_vertices.size(), sf::Lines, states);
+// }
 
 } // namespace TrafSim

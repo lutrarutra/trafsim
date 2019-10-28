@@ -18,6 +18,7 @@ public:
     ~Map();
     void addEntity(std::unique_ptr<MapEntity> &entity_ptr);
     void addEntities(std::vector<std::unique_ptr<MapEntity>> &entities);
+    void showVisible(const Window& window);
     // Draws everything on screen
     void draw(Window& window) const;
 private:

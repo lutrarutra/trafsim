@@ -13,6 +13,14 @@ Map::~Map()
     //     delete ptr;
 }
 
+void Map::showVisible(const Window& window)
+{
+    for(auto& entity : m_entities)
+    {
+        entity->showVisible(window);
+    }
+}
+
 void Map::addEntities(std::vector<std::unique_ptr<MapEntity>> &entities)
 {
     for(int i = 0; i < entities.size(); ++i)
@@ -27,7 +35,7 @@ void Map::addEntity(std::unique_ptr<MapEntity> &entity_ptr)
 
 void Map::draw(Window &window) const
 {
-    for (auto &entity : m_entities)
+    for (const auto &entity : m_entities)
     {
         entity->draw(window);
     }
