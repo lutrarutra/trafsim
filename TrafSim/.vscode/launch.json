@@ -10,8 +10,8 @@
             "cwd": "${workspaceFolder}/build",
             "preLaunchTask": "make",
             "args": [
-                // "../res/tammisalo.osm",
-                "../../../helsinki.osm"
+                "../res/tammisalo.osm",
+                // "../../../helsinki.osm"
             ],
             "internalConsoleOptions": "openOnSessionStart",
             "logging": {

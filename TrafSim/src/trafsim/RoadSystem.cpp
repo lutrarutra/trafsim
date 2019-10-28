@@ -29,6 +29,4 @@ void RoadSystem::draw(sf::RenderTarget &target, sf::RenderStates states) const
     target.draw(&m_vertices[0], m_vertices.size(), sf::Lines, states);
 }
 
-
-
 } // namespace TrafSim

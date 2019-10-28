@@ -42,9 +42,9 @@ configure_file(res/worldmap.png worldmap.png COPYONLY)
 # if you want to move sfml folder into another folder 
 # edit line "include_directories(other_folder/SFML/include)"
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/deps/cmake")
-find_package(SFML 2 REQUIRED network audio graphics window system)
+find_package(SFML 2.5 REQUIRED network audio graphics window system)
 if(SFML_FOUND)
-    include_directories(deps/SFML/include) #edit set this line according to where ur sfml folder is
+    include_directories(${SFML_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 endif()
 
