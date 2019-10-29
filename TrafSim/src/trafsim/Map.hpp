@@ -21,6 +21,7 @@ public:
     void addEntity(std::unique_ptr<MapEntity> &entity_ptr);
     void addEntities(std::vector<std::unique_ptr<MapEntity>> &entities);
     void showVisible(const Window& window);
+    void showZoomed(const Window& window);
     // Draws everything on screen
     void draw(Window& window) const;
 private:
@@ -35,6 +36,7 @@ public:
     //Prevents copying or deletes copy constructor
     Map(const Map &) = delete;
     std::thread t;
+    mutable std::mutex vector_mutex;
 };
 
 }; // namespace TrafSim

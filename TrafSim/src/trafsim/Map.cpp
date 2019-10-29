@@ -15,11 +15,19 @@ Map::~Map()
 
 void Map::checkVisible(const Window &window)
 {
-    running = true;
     for (auto &entity : m_entities)
     {
         if (entity)
             entity->showVisible(window);
+    }
+}
+
+void Map::showZoomed(const Window &window)
+{
+    for (auto &entity : m_entities)
+    {
+        if (entity)
+            entity->zoomVertices(window);
     }
 }
 
@@ -30,7 +38,11 @@ void Map::showVisible(const Window &window)
         t.join();
         running = false;
     }
-    t = std::thread(&Map::checkVisible, std::ref(*this), std::ref(window));
+    else
+    {
+        running = true;
+        t = std::thread(&Map::checkVisible, std::ref(*this), std::ref(window));
+    }
 }
 
 void Map::addEntities(std::vector<std::unique_ptr<MapEntity>> &entities)
@@ -47,10 +59,10 @@ void Map::addEntity(std::unique_ptr<MapEntity> &entity_ptr)
 
 void Map::draw(Window &window) const
 {
-    for (const auto &entity : m_entities)
+    std::lock_guard<std::mutex> lock(vector_mutex);
+    for (const auto &ptr : m_entities)
     {
-        if (entity)
-            entity->draw(window);
+        ptr->draw(window);
     }
 }
 

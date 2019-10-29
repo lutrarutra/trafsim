@@ -28,6 +28,7 @@ void Window::moveViewWithMouse(const sf::Vector2i &delta_mp)
 
 void Window::zoomView(sf::Vector2i relative_to, float zoom_dir)
 {
+    std::cout << m_zoom << "\n";
     if (zoom_dir == 0)
         return;
     const sf::Vector2f beforeCoord{m_window.mapPixelToCoords(relative_to)};
@@ -107,6 +108,7 @@ void Window::pollEvent()
         else if (e.type == sf::Event::MouseWheelScrolled)
         {
             zoomView(sf::Vector2i(e.mouseWheelScroll.x, e.mouseWheelScroll.y), e.mouseWheelScroll.delta);
+            app->handleEvent(e);
         }
         //Mouse buttons
         else if (e.type == sf::Event::MouseButtonPressed)

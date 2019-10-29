@@ -21,8 +21,9 @@ public:
     unsigned int getHeight() const { return m_window.getSize().y; }
     const sf::Color &getClearColor() const { return m_clearColor; }
     bool isOpen() const { return m_window.isOpen(); }
-    sf::Vector2i convert(const sf::Vector2f &point) const { return m_window.mapCoordsToPixel(point);}
+    sf::Vector2i convert(const sf::Vector2f &point) const { return m_window.mapCoordsToPixel(point); }
     bool isVisible(const sf::Vector2f &point, float offsreen = 1.f) const;
+    float getZoom() const { return m_zoom; }
 
     //rendering stuff
     void draw(const sf::Drawable &obj);

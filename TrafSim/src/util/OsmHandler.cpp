@@ -62,6 +62,7 @@ public:
                 building = std::make_unique<Building>(vertices, true);
             else
                 building = std::make_unique<Building>(vertices, false);
+            std::lock_guard<std::mutex> lock(m_map.vector_mutex);
             m_map.addEntity(building);
         }
         else if (roadTag && (strcmp(roadTag, "primary") == 0 || strcmp(roadTag, "secondary") == 0 || strcmp(roadTag, "tertiary") == 0 || strcmp(roadTag, "residential") == 0))
@@ -127,6 +128,8 @@ void OsmHandler::FindEntities(Map &map) const
                     road = std::make_unique<Road>(road_nodes, true);
                 else
                     road = std::make_unique<Road>(road_nodes, false);
+
+                std::lock_guard<std::mutex> lock(map.vector_mutex);
                 map.addEntity(road);
                 previous_node = nullptr;
                 road_nodes.clear();

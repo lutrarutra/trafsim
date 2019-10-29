@@ -98,6 +98,8 @@ void Application::handleEvent(const sf::Event &ev)
             m_map.showVisible(m_window);
         m_buttonBuffer[ev.mouseButton.button] = false;
         break;
+    case sf::Event::MouseWheelScrolled:
+        m_map.showZoomed(m_window);
     default:
         break;
     }
