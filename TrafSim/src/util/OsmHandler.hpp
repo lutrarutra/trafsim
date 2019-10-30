@@ -28,7 +28,6 @@
 
 #include <SFML/Graphics/Vertex.hpp>
 
-#include "trafsim/MapEntity.hpp"
 #include "trafsim/Building.hpp"
 #include "trafsim/Road.hpp"
 #include "trafsim/RoadSystem.hpp"

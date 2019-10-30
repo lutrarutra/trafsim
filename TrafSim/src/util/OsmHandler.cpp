@@ -45,7 +45,7 @@ public:
     void way(const osmium::Way &way)
     {
         // Instance of class Building will be owner of this ptr thus responsible for deletion
-        const char *buildingTag = way.tags()["building"];
+        const char *buildingTag = way.tags()["buildingg"];
         const char *roadTag = way.tags()["highway"];
 
         if (buildingTag)
@@ -57,7 +57,7 @@ public:
                 vertices.emplace_back(sf::Vector2f(m_instance->convert(node.location())));
             }
             //entities->push_back(std::make_unique<Building>(vertices));
-            std::unique_ptr<MapEntity> building;
+            std::unique_ptr<DrawableEntity> building;
             if (m_window.isVisible(vertices[vertices.size() - 1].position, 1.5f))
                 building = std::make_unique<Building>(vertices, true);
             else
@@ -123,7 +123,7 @@ void OsmHandler::FindEntities(Map &map) const
             unsigned long long current_reference = refs[i];
             if (current_reference == 0)
             {
-                std::unique_ptr<MapEntity> road;
+                std::unique_ptr<DrawableEntity> road;
                 if (m_window.isVisible(previous_node->getLocation(), 1.5f))
                     road = std::make_unique<Road>(road_nodes, true);
                 else

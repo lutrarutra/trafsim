@@ -4,7 +4,6 @@
 #include <thread>
 
 #include "Application.hpp"
-#include "trafsim/MapEntity.hpp"
 #include "util/GUI.hpp"
 #include "util/OsmHandler.hpp"
 
@@ -63,8 +62,9 @@ void Application::run(const char *argv)
         }
 
         m_window.pollEvent();
+        handleInputBuffers(fps_timer.msFromReset<float>(), delta_mp - sf::Mouse::getPosition());
+        delta_mp = sf::Mouse::getPosition();
         m_window.clear();
-
         //IamGui stuff
         GUI::performance_monitor(fps_array_);
         GUI::console(line, m_console_strings);
@@ -72,8 +72,6 @@ void Application::run(const char *argv)
 
         m_window.display();
         frame_counter++;
-        handleInputBuffers(fps_timer.msFromReset<float>(), delta_mp - sf::Mouse::getPosition());
-        delta_mp = sf::Mouse::getPosition();
     }
     exit();
     reader_thread.join();

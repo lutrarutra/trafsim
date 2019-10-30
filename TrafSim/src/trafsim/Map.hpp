@@ -6,7 +6,8 @@
 
 
 #include "core/Window.hpp"
-#include "MapEntity.hpp"
+
+#include "trafsim/DrawableEntity.hpp"
 
 namespace TrafSim
 {
@@ -18,8 +19,8 @@ class Map
 public:
     Map();
     ~Map();
-    void addEntity(std::unique_ptr<MapEntity> &entity_ptr);
-    void addEntities(std::vector<std::unique_ptr<MapEntity>> &entities);
+    void addEntity(std::unique_ptr<DrawableEntity> &entity_ptr);
+    void addEntities(std::vector<std::unique_ptr<DrawableEntity>> &entities);
     // if somethings out side of the screen or zoomed out far we dont need to see it
     void updateVisible(const Window& window);
     // Draws everything on screen
@@ -27,7 +28,7 @@ public:
 private:
     void checkVisible(const Window &window);
     //entities are stored as shared pointers in vector
-    std::vector<std::unique_ptr<MapEntity>> m_entities;
+    std::vector<std::unique_ptr<DrawableEntity>> m_entities;
     bool running = false;
 
 public:

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "trafsim/MapEntity.hpp"
+#include "core/Window.hpp"
 
 namespace TrafSim
 {
-class DrawableEntity : public MapEntity, public sf::Drawable
+class DrawableEntity : public sf::Drawable
 {
 public:
     //Takes ownership of vertices

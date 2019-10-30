@@ -4,7 +4,6 @@ namespace TrafSim
 {
 
 Car::Car(float lon, float lat)
-    : MapEntity(lon, lat), m_rect(sf::Vector2f(10.0f, 10.0f))
 {
     m_rect.setPosition(300, 300);
 }

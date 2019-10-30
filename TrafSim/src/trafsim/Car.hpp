@@ -1,11 +1,12 @@
 #pragma once
 
-#include "MapEntity.hpp"
+#include "trafsim/DrawableEntity.hpp"
+
 
 namespace TrafSim
 {
 
-class Car : public MapEntity, public sf::Drawable
+class Car : public DrawableEntity
 {
 public:
     Car(float lon = 0, float lat = 0);
