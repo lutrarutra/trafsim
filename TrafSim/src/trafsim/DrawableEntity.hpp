@@ -11,9 +11,8 @@ public:
     DrawableEntity() : m_type(sf::LineStrip){};
     DrawableEntity(std::vector<sf::Vertex> &vertices, const sf::PrimitiveType type, bool visible);
     virtual void draw(Window &window) const;
-    virtual void showVisible(const Window &window);
-    virtual void zoomVertices(const Window &window) = 0;
-    virtual unsigned int getVertexCount() const { return m_vertices.size(); };
+    virtual void updateVisible(const Window &window) = 0;
+    unsigned int getVertexCount() const { return m_vertices.size(); };
 
 private:
 protected:

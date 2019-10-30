@@ -29,7 +29,6 @@ sf::Vector2f RoadNode::getLocation() const
 
 void RoadNode::connect(std::shared_ptr<RoadNode> &another)
 {
-    //Check if we have duplicate
     //TODO - is duplicate pair possible to be pushed here?
     m_neighbors.push_back(another);
     another->m_neighbors.push_back(std::make_unique<RoadNode>(*this));

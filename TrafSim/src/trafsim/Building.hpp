@@ -14,7 +14,7 @@ class Building : public DrawableEntity
 public:
     //Takes ownership of vertices
     Building(std::vector<sf::Vertex> &verticies, bool visible = false) : DrawableEntity(verticies, sf::LineStrip, visible){};
-    virtual void zoomVertices(const Window &window);
+    virtual void updateVisible(const Window &window);
 private:
 
 };

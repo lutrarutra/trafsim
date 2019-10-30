@@ -18,20 +18,11 @@ void Map::checkVisible(const Window &window)
     for (auto &entity : m_entities)
     {
         if (entity)
-            entity->showVisible(window);
+            entity->updateVisible(window);
     }
 }
 
-void Map::showZoomed(const Window &window)
-{
-    for (auto &entity : m_entities)
-    {
-        if (entity)
-            entity->zoomVertices(window);
-    }
-}
-
-void Map::showVisible(const Window &window)
+void Map::updateVisible(const Window &window)
 {
     if (running)
     {

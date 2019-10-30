@@ -15,33 +15,6 @@ void DrawableEntity::draw(Window &window) const
     window.draw(*this);
 }
 
-void DrawableEntity::showVisible(const Window &window)
-{
-    m_visible_vertices.clear();
-    const int x = window.getWidth();
-    const int y = window.getHeight();
-    for (unsigned int i = 0; i < m_vertices.size(); i)
-    {
-        if (m_type == sf::Lines)
-        {
-            if (window.isVisible(m_vertices[i].position, 1.5f))
-            {
-                m_visible_vertices.push_back(m_vertices[i]);
-                m_visible_vertices.push_back(m_vertices[i + 1]);
-            }
-            i += 2;
-        }
-        else
-        {
-            if (window.isVisible(m_vertices[i].position, 1.5f))
-            {
-                m_visible_vertices.push_back(m_vertices[i]);
-            }
-            ++i;
-        }
-    }
-}
-
 void DrawableEntity::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     //PerformanceTimer p;

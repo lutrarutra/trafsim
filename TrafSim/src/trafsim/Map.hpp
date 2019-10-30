@@ -20,8 +20,8 @@ public:
     ~Map();
     void addEntity(std::unique_ptr<MapEntity> &entity_ptr);
     void addEntities(std::vector<std::unique_ptr<MapEntity>> &entities);
-    void showVisible(const Window& window);
-    void showZoomed(const Window& window);
+    // if somethings out side of the screen or zoomed out far we dont need to see it
+    void updateVisible(const Window& window);
     // Draws everything on screen
     void draw(Window& window) const;
 private:

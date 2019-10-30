@@ -66,7 +66,6 @@ void Application::run(const char *argv)
         m_window.clear();
 
         //IamGui stuff
-        //GUI::progress_bar(0.5f, "Loading progress..");
         GUI::performance_monitor(fps_array_);
         GUI::console(line, m_console_strings);
         m_map.draw(m_window);
@@ -95,11 +94,12 @@ void Application::handleEvent(const sf::Event &ev)
         break;
     case sf::Event::MouseButtonReleased:
         if (ev.mouseButton.button == sf::Mouse::Left)
-            m_map.showVisible(m_window);
+            m_map.updateVisible(m_window);
         m_buttonBuffer[ev.mouseButton.button] = false;
         break;
     case sf::Event::MouseWheelScrolled:
-        m_map.showZoomed(m_window);
+        m_map.updateVisible(m_window);
+        break;
     default:
         break;
     }

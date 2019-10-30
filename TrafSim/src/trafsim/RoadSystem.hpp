@@ -12,7 +12,6 @@ class RoadSystem
 {
 public:
     RoadSystem(std::vector<std::shared_ptr<Road>> &roads) { m_roads = std::move(roads); };
-    const std::shared_ptr<RoadNode> closestNode(const sf::Vector2f loc) const;
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
 private:
