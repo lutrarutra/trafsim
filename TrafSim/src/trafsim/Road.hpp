@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "util/VectorUtil.hpp"
+#include "trafsim/Node.hpp"
 
 namespace TrafSim
 {
@@ -14,6 +15,7 @@ public:
 private:
     std::vector<sf::Vector2f> m_points;
     std::vector<sf::Vertex> m_vertices;
+    std::vector<std::shared_ptr<Node>> m_nodes;
     float m_lanewidth;
     int m_lanecount;
 };

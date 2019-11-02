@@ -35,12 +35,8 @@ void Application::run(const char *argv)
     unsigned int frame_counter = 0;
 
     std::vector<sf::Vector2f> p;
-    p.emplace_back(0, 200);
-    p.emplace_back(200, 200);
-    p.emplace_back(200, 400);
-    p.emplace_back(400, 400);
-    p.emplace_back(600, 600);
-    p.emplace_back(600, 800);
+    p.emplace_back(0, 500);
+    p.emplace_back(1000, 500);
     Road r(p, 50.f);
 
     //Keep track of mouse movement between each frame (delta_mouseposition)
