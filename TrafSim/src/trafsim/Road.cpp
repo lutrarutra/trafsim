@@ -18,10 +18,10 @@ Road::Road(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end,
 void Road::init(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end, float lane_width, int lanecount)
 {
     m_dir = end->getPos() - begin->getPos();
-    m_dir = Normalize(m_dir);
+    m_dir = VectorMath::Normalize(m_dir);
 
     //Permendicular direction to m_dir
-    sf::Vector2f pdir = Rotate(m_dir, M_PI / 2);
+    sf::Vector2f pdir = VectorMath::Rotate(m_dir, M_PI / 2);
 
     //Begin right, begin left, end right, end left nodes
     m_vertices.emplace_back(begin->getPos() + pdir * m_lanewidth);
