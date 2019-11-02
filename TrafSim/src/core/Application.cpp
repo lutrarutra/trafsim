@@ -32,17 +32,41 @@ void Application::run(const char *argv)
     std::string line = "";
     unsigned int frame_counter = 0;
 
-    std::vector<std::shared_ptr<Node>> n;
-    auto n1 = std::make_shared<Node>(sf::Vector2f(0, 500));
-    auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 500));
-    auto n3 = std::make_shared<Node>(sf::Vector2f(1500, 500));
+    // auto n1 = std::make_shared<Node>(sf::Vector2f(100, 1000));
+    // auto n2 = std::make_shared<Node>(sf::Vector2f(600, 1000));
+
+    // auto n3 = std::make_shared<Node>(sf::Vector2f(600, 500));
+    // auto n4 = std::make_shared<Node>(sf::Vector2f(100, 500));
+
+    // auto n5 = std::make_shared<Node>(sf::Vector2f(1000, 500));
+    // auto n6 = std::make_shared<Node>(sf::Vector2f(1000, 1000));
+
+    // auto n7 = std::make_shared<Node>(sf::Vector2f(1500, 1000));
+    // auto n8 = std::make_shared<Node>(sf::Vector2f(1500, 500));
+
+    // n1->connect(n2);
+    // n3->connect(n4);
+    // n5->connect(n6);
+    // n7->connect(n8);
+
+    // m_map.createRoads(n1);
+    // m_map.createRoads(n3);
+    // m_map.createRoads(n5);
+    // m_map.createRoads(n7);
+
+    auto n1 = std::make_shared<Node>(sf::Vector2f(1000, 500));
+    auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 1500));
+
+    auto n3 = std::make_shared<Node>(sf::Vector2f(500, 1000));
     auto n4 = std::make_shared<Node>(sf::Vector2f(1500, 1000));
+
     n1->connect(n2);
-    n2->connect(n3);
     n3->connect(n4);
-
-
     m_map.createRoads(n1);
+    m_map.createRoads(n3);
+    m_map.checkIntersections();
+
+    m_map.addCar(n2);
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
 
@@ -55,6 +79,7 @@ void Application::run(const char *argv)
             ticks++;
             //We need to remove little lag from our timer so it won't stack it
             lag -= m_tickTimer.msFromReset<float>() - m_secondsPerTick;
+            m_map.update(m_tickTimer.msFromReset<float>());
             m_tickTimer.reset();
         }
         //Calculate and update fps each 100ms
@@ -99,7 +124,7 @@ void Application::handleEvent(const sf::Event &ev)
         break;
     case sf::Event::MouseButtonReleased:
         if (ev.mouseButton.button == sf::Mouse::Left)
-        m_buttonBuffer[ev.mouseButton.button] = false;
+            m_buttonBuffer[ev.mouseButton.button] = false;
         break;
     case sf::Event::MouseWheelScrolled:
         break;

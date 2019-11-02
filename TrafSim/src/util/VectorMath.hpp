@@ -23,7 +23,7 @@ public:
 
     static sf::Vector2f Rotate(const sf::Vector2f &v, float angle);
 
-    static std::pair<bool, sf::Vector2f> IntersectionPoint(const sf::Vector2f &v1, const sf::Vector2f &v2, const sf::Vector2f &v3, const sf::Vector2f &v4);
+    static float IntersectionPoint(const sf::Vector2f &v1, const sf::Vector2f &v2, const sf::Vector2f &v3, const sf::Vector2f &v4);
 };
 
 } // namespace TrafSim

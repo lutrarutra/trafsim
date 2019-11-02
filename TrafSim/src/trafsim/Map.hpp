@@ -18,10 +18,14 @@ class Map
 {
 public:
     Map();
-    void createRoads(const std::shared_ptr<Node> begin);
     void draw(Window &window) const;
     void update(float delta_time);
+
+    //Entity handling
+    void addCar(const std::shared_ptr<Node> &node);
+    void createRoads(const std::shared_ptr<Node> begin);
     void checkIntersections();
+    const std::shared_ptr<Road> findClosestNode(const sf::Vector2f &pos);
 
 private:
     // Constructs roads from nodes using recursive DFS algorithm to iterate over node graph
