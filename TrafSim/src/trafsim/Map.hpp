@@ -4,7 +4,6 @@
 #include <memory>
 #include <thread>
 
-
 #include "core/Window.hpp"
 #include "util/VectorUtil.hpp"
 #include "trafsim/Road.hpp"
@@ -18,10 +17,13 @@ class Map
 {
 public:
     Map();
-    void createRoads(const std::vector<std::shared_ptr<Node>> &nodes);
-    void draw(Window& window) const;
+    void createRoads(const std::shared_ptr<Node> begin);
+    void draw(Window &window) const;
+
 private:
-    std::vector<Road> m_roads;
+    void dfs(const std::shared_ptr<Node> &cur, std::shared_ptr<Road> prevRoad, std::map<std::shared_ptr<Node>, bool> &visited);
+
+    std::vector<std::shared_ptr<Road>> m_roads;
 };
 
 }; // namespace TrafSim

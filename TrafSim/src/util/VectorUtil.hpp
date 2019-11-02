@@ -6,7 +6,6 @@
 
 namespace TrafSim
 {
-
 static float Size(const sf::Vector2f &v)
 {
     return sqrt(pow(v.x, 2) + pow(v.y, 2));

@@ -1,5 +1,7 @@
 #include "trafsim/Node.hpp"
 
+#include <iostream>
+
 namespace TrafSim
 {
 

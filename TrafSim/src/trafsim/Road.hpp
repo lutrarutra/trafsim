@@ -11,10 +11,13 @@ class Road : public sf::Drawable
 {
 public:
     Road(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end, float lane_width, int lanecount = 2);
+    Road(const Road& prev_road, const std::shared_ptr<Node> &end);
     const std::vector<std::shared_ptr<Node>> &getLaneNodes() const { return m_laneNodes; }
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
 private:
+    void init(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end, float lane_width, int lanecount);
+
     std::vector<sf::Vector2f> m_points;
     std::vector<sf::Vertex> m_vertices;
     std::vector<std::shared_ptr<Node>> m_laneNodes;

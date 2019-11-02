@@ -35,13 +35,14 @@ void Application::run(const char *argv)
     std::vector<std::shared_ptr<Node>> n;
     auto n1 = std::make_shared<Node>(sf::Vector2f(0, 500));
     auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 500));
-    auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 500));
-    auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 500));
+    auto n3 = std::make_shared<Node>(sf::Vector2f(1500, 500));
+    auto n4 = std::make_shared<Node>(sf::Vector2f(1500, 1000));
     n1->connect(n2);
-    n.push_back(n1);
-    n.push_back(n2);
+    n2->connect(n3);
+    n3->connect(n4);
 
-    m_map.createRoads(n);
+
+    m_map.createRoads(n1);
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
 

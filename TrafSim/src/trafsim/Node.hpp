@@ -20,6 +20,7 @@ public:
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
+
 private:
     const sf::Vector2f m_pos;
     std::vector<std::shared_ptr<Node>> m_neighbors;

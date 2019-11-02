@@ -3,8 +3,19 @@
 namespace TrafSim
 {
 
+Road::Road(const Road &prev_road, const std::shared_ptr<Node> &end)
+    : m_begin(prev_road.m_end), m_end(end), m_lanewidth(prev_road.m_lanewidth), m_lanecount(prev_road.m_lanecount)
+{
+    init(m_begin, m_end, m_lanewidth, m_lanecount);
+}
+
 Road::Road(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end, float lane_width, int lanecount)
     : m_begin(begin), m_end(end), m_lanewidth(lane_width), m_lanecount(lanecount)
+{
+    init(m_begin, m_end, m_lanewidth, m_lanecount);
+}
+
+void Road::init(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end, float lane_width, int lanecount)
 {
     m_dir = end->getPos() - begin->getPos();
     m_dir = Normalize(m_dir);

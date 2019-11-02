@@ -7,23 +7,36 @@ Map::Map()
 {
 }
 
-void Map::createRoads(const std::vector<std::shared_ptr<Node>> &nodes)
+void Map::dfs(const std::shared_ptr<Node>& cur, std::shared_ptr<Road> prevRoad, std::map<std::shared_ptr<Node>, bool> &visited)
 {
-    for (const auto &node : nodes)
+    if (visited[cur])
+        return;
+    visited[cur] = true;
+
+    for (const auto &neighbor : cur->getNeighbors())
     {
-        std::cout << node->getPos().x << " " << node->getPos().y << "\n";
-        for (const auto &neighbor : node->getNeighbors())
-        {
-            std::cout << neighbor->getPos().x << " " << neighbor->getPos().y << "\n";
-            m_roads.emplace_back(node, neighbor, 100.f);
-        }
+        if(prevRoad == nullptr)
+            m_roads.push_back(std::make_shared<Road>(cur, neighbor, 100.f));
+        else
+            m_roads.push_back(std::make_shared<Road>(*prevRoad, neighbor));
+
+        dfs(neighbor, m_roads[m_roads.size()-1], visited);
     }
+}
+
+void Map::createRoads(const std::shared_ptr<Node> begin)
+{
+    Road *road = nullptr;
+    std::shared_ptr<Node> cur = begin;
+    std::shared_ptr<Node> prev = nullptr;
+    std::map<std::shared_ptr<Node>, bool> visited;
+    dfs(cur, nullptr, visited);
 }
 
 void Map::draw(Window &window) const
 {
     for (const auto &road : m_roads)
-        window.draw(road);
+        window.draw(*road);
 }
 
 }; // namespace TrafSim
