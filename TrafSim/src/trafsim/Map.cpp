@@ -15,14 +15,38 @@ void Map::update(float delta_time)
     }
 }
 
-void Map::addCar(const std::shared_ptr<Node> &node)
+void Map::addCar(const sf::Vector2f &pos)
 {
+    auto closest_road = findClosestRoad(pos);
+    auto lane_begins = closest_road->getLaneBeginNodes();
+    std::shared_ptr<Node> node;
+    if (lane_begins.first->getNeighbors().size() > 0)
+        node = lane_begins.first;
+    else
+        node = lane_begins.second;
     Car car(node, node->getNeighbors()[0], {80.f, 80.f});
     m_cars.push_back(car);
 }
 
-const std::shared_ptr<Road> Map::findClosestNode(const sf::Vector2f &pos)
+const std::shared_ptr<Road> Map::findClosestRoad(const sf::Vector2f &pos)
 {
+    float distance = __FLT_MAX__;
+    std::shared_ptr<Road> closest;
+    for (const auto &road : m_roads)
+    {
+        auto endpoints = road->getEndPoints();
+        if (distance > VectorMath::Distance(endpoints.first, pos))
+        {
+            distance = VectorMath::Distance(endpoints.first, pos);
+            closest = road;
+        }
+        if (distance > VectorMath::Distance(endpoints.second, pos))
+        {
+            distance = VectorMath::Distance(endpoints.second, pos);
+            closest = road;
+        }
+    }
+    return closest;
 }
 
 void Map::checkIntersections()

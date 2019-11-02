@@ -19,11 +19,13 @@ public:
     void createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos);
 
     std::pair<sf::Vector2f, sf::Vector2f> getEndPoints() const { return {m_begin->getPos(), m_end->getPos()}; }
+    std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> getLaneBeginNodes() const { return {m_brNode, m_blNode}; }
+    
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
 private:
-    void init(float lane_width);
+    void init();
 
     std::shared_ptr<Node> m_brNode, m_blNode, m_erNode, m_elNode;
     

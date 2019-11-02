@@ -3,18 +3,12 @@
 namespace TrafSim
 {
 
-sf::RectangleShape makeArrow(sf::Vector2f pos, sf::Color color)
-{
-    sf::RectangleShape arr(sf::Vector2f(20.f, 6.f));
-    arr.setOrigin(0, 3.f);
-    arr.setPosition(pos);
-    arr.setFillColor(color);
-    return arr;
-}
 
-Node::Node(const sf::Vector2f &pos, sf::Color color) : m_pos(pos)
+Node::Node(const sf::Vector2f &pos, sf::Color color) : m_pos(pos), c(6.f)
 {
-    m_arrows.push_back(makeArrow(pos, color));
+    c.setOrigin(3.f,3.f);
+    c.setPosition(pos);
+    c.setFillColor(color);
 }
 
 void Node::disconnect(const std::shared_ptr<Node> &node)
@@ -24,7 +18,9 @@ void Node::disconnect(const std::shared_ptr<Node> &node)
         if (node == *it)
         {
             std::cout << "disconnecteded" << std::endl;
+            std::cout << m_neighbors.size() << std::endl;
             m_neighbors.erase(it);
+            std::cout << m_neighbors.size() << std::endl;
             return;
         }
     }
@@ -32,15 +28,12 @@ void Node::disconnect(const std::shared_ptr<Node> &node)
 
 void Node::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    for(const auto& arrow : m_arrows)
-        target.draw(arrow);
+    target.draw(c);
 }
 
 void Node::connect(std::shared_ptr<Node> &another)
 {
     m_neighbors.push_back(another);
-    m_arrows.push_back(makeArrow(m_pos, sf::Color::Green));
-    m_arrows[m_arrows.size()-1].rotate(VectorMath::Angle(another->m_pos - m_pos, {1,0}) * 180 / M_PI);
 }
 
 } // namespace TrafSim

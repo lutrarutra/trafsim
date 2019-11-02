@@ -28,7 +28,7 @@ public:
 private:
     const sf::Vector2f m_pos;
     std::vector<std::shared_ptr<Node>> m_neighbors;
-    std::vector<sf::RectangleShape> m_arrows;
+    sf::CircleShape c; 
 };
 
 } // namespace TrafSim

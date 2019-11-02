@@ -24,7 +24,7 @@ private:
     const sf::Vector2f size;
     sf::Vector2f m_pos;
     //Velocity and acceleration
-    sf::Vector2f m_v, m_a;
+    float m_v, m_a;
 
     std::vector<unsigned int> m_route;
     

@@ -32,33 +32,12 @@ void Application::run(const char *argv)
     std::string line = "";
     unsigned int frame_counter = 0;
 
-    // auto n1 = std::make_shared<Node>(sf::Vector2f(100, 1000));
-    // auto n2 = std::make_shared<Node>(sf::Vector2f(600, 1000));
+    auto n1 = std::make_shared<Node>(sf::Vector2f(1500, 500));
+    auto n2 = std::make_shared<Node>(sf::Vector2f(1500, 1500));
 
-    // auto n3 = std::make_shared<Node>(sf::Vector2f(600, 500));
-    // auto n4 = std::make_shared<Node>(sf::Vector2f(100, 500));
+    auto n3 = std::make_shared<Node>(sf::Vector2f(1000, 1000));
+    auto n4 = std::make_shared<Node>(sf::Vector2f(2000, 1000));
 
-    // auto n5 = std::make_shared<Node>(sf::Vector2f(1000, 500));
-    // auto n6 = std::make_shared<Node>(sf::Vector2f(1000, 1000));
-
-    // auto n7 = std::make_shared<Node>(sf::Vector2f(1500, 1000));
-    // auto n8 = std::make_shared<Node>(sf::Vector2f(1500, 500));
-
-    // n1->connect(n2);
-    // n3->connect(n4);
-    // n5->connect(n6);
-    // n7->connect(n8);
-
-    // m_map.createRoads(n1);
-    // m_map.createRoads(n3);
-    // m_map.createRoads(n5);
-    // m_map.createRoads(n7);
-
-    auto n1 = std::make_shared<Node>(sf::Vector2f(1000, 500));
-    auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 1500));
-
-    auto n3 = std::make_shared<Node>(sf::Vector2f(500, 1000));
-    auto n4 = std::make_shared<Node>(sf::Vector2f(1500, 1000));
 
     n1->connect(n2);
     n3->connect(n4);
@@ -66,7 +45,7 @@ void Application::run(const char *argv)
     m_map.createRoads(n3);
     m_map.checkIntersections();
 
-    m_map.addCar(n2);
+    m_map.addCar({2000, 1500});
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
 
