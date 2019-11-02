@@ -1,40 +1,33 @@
-#include "Road.hpp"
+#include "trafsim/Road.hpp"
 
 namespace TrafSim
 {
 
-Road::Road(const std::vector<std::shared_ptr<RoadNode>> nodes, bool visible) : m_nodes(std::move(nodes))
+Road::Road(const std::vector<sf::Vector2f> &points, float lane_width, int lanecount)
+    : m_points(points), m_lanewidth(lane_width), m_lanecount(lanecount)
 {
-    for (const auto &node : m_nodes)
-        m_vertices.emplace_back(node->getLocation());
-
-    if (visible)
-        m_visible_vertices = std::vector<sf::Vertex>(m_vertices);
-}
-
-void Road::updateVisible(const Window &window)
-{
-    m_visible_vertices.clear();
-    const int x = window.getWidth();
-    const int y = window.getHeight();
-    for (unsigned int i = 0; i < m_vertices.size(); ++i)
+    for (unsigned int i = 0; i < m_points.size(); ++i)
     {
-        if (m_type == sf::Lines)
+        sf::Vector2f dir(0, 0);
+        if (i < m_points.size() - 1)
         {
-            if (window.isVisible(m_vertices[i].position, 1.5f))
-            {
-                m_visible_vertices.push_back(m_vertices[i]);
-                m_visible_vertices.push_back(m_vertices[i + 1]);
-            }
-            ++i;
+            dir += m_points[i + 1] - m_points[i];
         }
-        else
+        if (i > 0)
         {
-            if (window.isVisible(m_vertices[i].position, 1.5f))
-            {
-                m_visible_vertices.push_back(m_vertices[i]);
-            }
+            dir += m_points[i] - m_points[i - 1];
         }
+        dir = Normalize(dir);
+        dir = Rotate(dir,  M_PI / 2);
+        // perpendicular
+        m_vertices.emplace_back(m_points[i] + (dir * m_lanewidth));
+        m_vertices.emplace_back(m_points[i] - (dir * m_lanewidth));
     }
 }
+
+void Road::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    target.draw(&m_vertices[0], m_vertices.size(), sf::TriangleStrip);
+}
+
 } // namespace TrafSim

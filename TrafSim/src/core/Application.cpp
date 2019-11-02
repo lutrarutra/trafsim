@@ -5,7 +5,10 @@
 
 #include "Application.hpp"
 #include "util/GUI.hpp"
-#include "util/OsmHandler.hpp"
+
+#include "trafsim/Car.hpp"
+
+#include "trafsim/Road.hpp"
 
 namespace TrafSim
 {
@@ -31,8 +34,14 @@ void Application::run(const char *argv)
     std::string line = "";
     unsigned int frame_counter = 0;
 
-    OsmHandler osm(argv, m_window);
-    std::thread reader_thread(&OsmHandler::FindEntities, &osm, std::ref(m_map));
+    std::vector<sf::Vector2f> p;
+    p.emplace_back(0, 200);
+    p.emplace_back(200, 200);
+    p.emplace_back(200, 400);
+    p.emplace_back(400, 400);
+    p.emplace_back(600, 600);
+    p.emplace_back(600, 800);
+    Road r(p, 50.f);
 
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
@@ -68,13 +77,12 @@ void Application::run(const char *argv)
         //IamGui stuff
         GUI::performance_monitor(fps_array_);
         GUI::console(line, m_console_strings);
-        m_map.draw(m_window);
+        m_window.draw(r);
 
         m_window.display();
         frame_counter++;
     }
     exit();
-    reader_thread.join();
 }
 
 void Application::handleEvent(const sf::Event &ev)

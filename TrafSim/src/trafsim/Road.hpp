@@ -1,20 +1,20 @@
 #pragma once
 
-#include "trafsim/DrawableEntity.hpp"
-#include "trafsim/RoadNode.hpp"
+#include <SFML/Graphics.hpp>
+
+#include "util/VectorUtil.hpp"
 
 namespace TrafSim
 {
-
-class Road : public DrawableEntity
+class Road : public sf::Drawable
 {
 public:
-    //Takes ownership of vertices
-    Road(const std::vector<std::shared_ptr<RoadNode>> nodes, bool visible = false);
-    const std::vector<std::shared_ptr<RoadNode>>& getNodes() const { return m_nodes; }
-    virtual void updateVisible(const Window &window);
-
+    Road(const std::vector<sf::Vector2f> &points, float lane_width, int lanecount = 2);
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 private:
-    const std::vector<std::shared_ptr<RoadNode>> m_nodes;
+    std::vector<sf::Vector2f> m_points;
+    std::vector<sf::Vertex> m_vertices;
+    float m_lanewidth;
+    int m_lanecount;
 };
 } // namespace TrafSim
