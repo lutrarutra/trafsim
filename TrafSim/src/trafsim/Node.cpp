@@ -3,7 +3,7 @@
 namespace TrafSim
 {
 
-Node::Node(const sf::Vector2f &pos)
+Node::Node(const sf::Vector2f &pos) : m_pos(pos)
 {
     c.setRadius(5.f);
     c.setOrigin(5.f, 5.f);

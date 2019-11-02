@@ -3,40 +3,41 @@
 namespace TrafSim
 {
 
-Road::Road(const std::vector<sf::Vector2f> &points, float lane_width, int lanecount)
-    : m_points(points), m_lanewidth(lane_width), m_lanecount(lanecount)
+Road::Road(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end, float lane_width, int lanecount)
+    : m_begin(begin), m_end(end), m_lanewidth(lane_width), m_lanecount(lanecount)
 {
-    for (unsigned int i = 0; i < m_points.size(); ++i)
-    {
-        sf::Vector2f dir(0, 0);
-        if (i < m_points.size() - 1)
-        {
-            dir += m_points[i + 1] - m_points[i];
-        }
-        if (i > 0)
-        {
-            dir += m_points[i] - m_points[i - 1];
-        }
-        dir = Normalize(dir);
-        dir = Rotate(dir, M_PI / 2);
-        m_vertices.emplace_back(m_points[i] + dir * m_lanewidth);
-        m_vertices.emplace_back(m_points[i] - dir * m_lanewidth);
-        // perpendicular
-        auto rNode = std::make_shared<Node>(m_points[i] + dir * m_lanewidth * 0.5f);
-        if (m_nodes.size() > 1)
-            m_nodes[m_nodes.size() - 2]->connect(rNode);
-        m_nodes.push_back(rNode);
-        auto lNode = std::make_shared<Node>(m_points[i] - dir * m_lanewidth * 0.5f);
-        if (m_nodes.size() > 1)
-            m_nodes[m_nodes.size() - 2]->connect(lNode);
-        m_nodes.push_back(lNode);
-    }
+    m_dir = end->getPos() - begin->getPos();
+    m_dir = Normalize(m_dir);
+
+    //Permendicular direction to m_dir
+    sf::Vector2f pdir = Rotate(m_dir, M_PI / 2);
+
+    //Begin right, begin left, end right, end left nodes
+    m_vertices.emplace_back(begin->getPos() + pdir * m_lanewidth);
+    auto brNode = std::make_shared<Node>(m_begin->getPos() + pdir * m_lanewidth * 0.5f);
+
+    m_vertices.emplace_back(begin->getPos() - pdir * m_lanewidth);
+    auto blNode = std::make_shared<Node>(m_begin->getPos() - pdir * m_lanewidth * 0.5f);
+
+    m_vertices.emplace_back(end->getPos() + pdir * m_lanewidth);
+    auto erNode = std::make_shared<Node>(m_end->getPos() + pdir * m_lanewidth * 0.5f);
+
+    m_vertices.emplace_back(end->getPos() - pdir * m_lanewidth);
+    auto elNode = std::make_shared<Node>(m_end->getPos() - pdir * m_lanewidth * 0.5f);
+
+    brNode->connect(erNode);
+    blNode->connect(elNode);
+
+    m_laneNodes.push_back(brNode);
+    m_laneNodes.push_back(blNode);
+    m_laneNodes.push_back(erNode);
+    m_laneNodes.push_back(elNode);
 }
 
 void Road::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(&m_vertices[0], m_vertices.size(), sf::TriangleStrip);
-    for(const auto& node : m_nodes)
+    for (const auto &node : m_laneNodes)
     {
         target.draw(*node);
     }

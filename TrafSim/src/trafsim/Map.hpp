@@ -6,6 +6,8 @@
 
 
 #include "core/Window.hpp"
+#include "util/VectorUtil.hpp"
+#include "trafsim/Road.hpp"
 
 namespace TrafSim
 {
@@ -16,17 +18,10 @@ class Map
 {
 public:
     Map();
-    ~Map();
-    void addEntity();
-    void addEntities();
-    // if somethings out side of the screen or zoomed out far we dont need to see it
-    void updateVisible(const Window& window);
-    // Draws everything on screen
+    void createRoads(const std::vector<std::shared_ptr<Node>> &nodes);
     void draw(Window& window) const;
 private:
-    void checkVisible(const Window &window);
-    //entities are stored as shared pointers in vector
-public:
+    std::vector<Road> m_roads;
 };
 
 }; // namespace TrafSim

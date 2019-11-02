@@ -16,6 +16,7 @@ public:
     void connect(std::shared_ptr<Node> &another);
 
     const sf::Vector2f &getPos() const { return m_pos; }
+    const std::vector<std::shared_ptr<Node>>& getNeighbors() const { return m_neighbors; }
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 

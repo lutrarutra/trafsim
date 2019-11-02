@@ -8,8 +8,6 @@
 
 #include "trafsim/Car.hpp"
 
-#include "trafsim/Road.hpp"
-
 namespace TrafSim
 {
 
@@ -34,11 +32,16 @@ void Application::run(const char *argv)
     std::string line = "";
     unsigned int frame_counter = 0;
 
-    std::vector<sf::Vector2f> p;
-    p.emplace_back(0, 500);
-    p.emplace_back(1000, 500);
-    Road r(p, 50.f);
+    std::vector<std::shared_ptr<Node>> n;
+    auto n1 = std::make_shared<Node>(sf::Vector2f(0, 500));
+    auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 500));
+    auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 500));
+    auto n2 = std::make_shared<Node>(sf::Vector2f(1000, 500));
+    n1->connect(n2);
+    n.push_back(n1);
+    n.push_back(n2);
 
+    m_map.createRoads(n);
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
 
@@ -73,8 +76,7 @@ void Application::run(const char *argv)
         //IamGui stuff
         GUI::performance_monitor(fps_array_);
         GUI::console(line, m_console_strings);
-        m_window.draw(r);
-
+        m_map.draw(m_window);
         m_window.display();
         frame_counter++;
     }
@@ -96,11 +98,9 @@ void Application::handleEvent(const sf::Event &ev)
         break;
     case sf::Event::MouseButtonReleased:
         if (ev.mouseButton.button == sf::Mouse::Left)
-            m_map.updateVisible(m_window);
         m_buttonBuffer[ev.mouseButton.button] = false;
         break;
     case sf::Event::MouseWheelScrolled:
-        m_map.updateVisible(m_window);
         break;
     default:
         break;
