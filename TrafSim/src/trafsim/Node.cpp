@@ -3,13 +3,14 @@
 namespace TrafSim
 {
 
-
-Node::Node(const sf::Vector2f &pos, sf::Color color) : m_pos(pos), c(6.f)
+Node::Node(const sf::Vector2f &pos, sf::Color color)
+    : m_pos(pos), c(6.f)
 {
-    c.setOrigin(3.f,3.f);
-    c.setPosition(pos);
+    c.setOrigin(3.f, 3.f);
+    c.setPosition(m_pos);
     c.setFillColor(color);
 }
+
 
 void Node::disconnect(const std::shared_ptr<Node> &node)
 {
@@ -17,10 +18,7 @@ void Node::disconnect(const std::shared_ptr<Node> &node)
     {
         if (node == *it)
         {
-            std::cout << "disconnecteded" << std::endl;
-            std::cout << m_neighbors.size() << std::endl;
             m_neighbors.erase(it);
-            std::cout << m_neighbors.size() << std::endl;
             return;
         }
     }

@@ -26,9 +26,9 @@ public:
     void disconnect(const std::shared_ptr<Node> &node);
 
 private:
-    const sf::Vector2f m_pos;
+    sf::Vector2f m_pos;
     std::vector<std::shared_ptr<Node>> m_neighbors;
-    sf::CircleShape c; 
+    sf::CircleShape c;
 };
 
 } // namespace TrafSim

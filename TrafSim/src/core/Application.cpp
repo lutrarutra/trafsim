@@ -45,7 +45,7 @@ void Application::run(const char *argv)
     m_map.createRoads(n3);
     m_map.checkIntersections();
 
-    m_map.addCar({2000, 1500});
+    m_map.addCar({0, 0});
     //Keep track of mouse movement between each frame (delta_mouseposition)
     sf::Vector2i delta_mp = sf::Mouse::getPosition();
 

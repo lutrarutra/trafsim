@@ -4,9 +4,9 @@
 #include <memory>
 #include <thread>
 
+#include "trafsim/Intersection.hpp"
 #include "core/Window.hpp"
 #include "util/VectorMath.hpp"
-#include "trafsim/Road.hpp"
 #include "trafsim/Car.hpp"
 
 namespace TrafSim
@@ -23,7 +23,7 @@ public:
 
     //Entity handling
     void addCar(const sf::Vector2f &pos);
-    void createRoads(const std::shared_ptr<Node> begin);
+    void createRoads(const std::shared_ptr<Node>& begin);
     void checkIntersections();
     const std::shared_ptr<Road> findClosestRoad(const sf::Vector2f &pos);
 
@@ -33,6 +33,7 @@ private:
 
     std::vector<std::shared_ptr<Road>> m_roads;
     std::vector<Car> m_cars;
+    std::vector<Intersection> m_intersections;
 };
 
 }; // namespace TrafSim

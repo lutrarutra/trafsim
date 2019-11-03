@@ -17,9 +17,6 @@ Road::Road(const Road &prev_road, const std::shared_ptr<Node> &end)
 Road::Road(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end, float lane_width)
     : m_begin(begin), m_end(end), m_dir(VectorMath::Normalize(m_end->getPos() - m_begin->getPos())), m_lanewidth(lane_width)
 {
-    std::cout << "unique"
-              << "\n";
-
     //Permendicular direction to m_dir
     sf::Vector2f pdir = {-m_dir.y, m_dir.x};
 
@@ -50,48 +47,54 @@ void Road::init()
     m_blNode->connect(m_elNode);
 }
 
-void Road::createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos)
+void Road::createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos, std::shared_ptr<Node> *intersection_nodes)
 {
+    std::shared_ptr<Node> &brNode1 = intersection_nodes[0];
+    std::shared_ptr<Node> &brNode2 = intersection_nodes[1];
+    std::shared_ptr<Node> &blNode1 = intersection_nodes[2];
+    std::shared_ptr<Node> &blNode2 = intersection_nodes[3];
+
     m_brNode->disconnect(m_erNode);
-    std::shared_ptr<Node> brNode1;
-    std::shared_ptr<Node> brNode2;
-    if (m_dir.x > m_dir.y)
+
+    if (brNode1 == nullptr || brNode2 == nullptr)
     {
-        brNode1 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
-        brNode2 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
+        if (m_dir.x > m_dir.y)
+        {
+            brNode1 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
+            brNode2 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
+        }
+        else
+        {
+            brNode1 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
+            brNode2 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
+        }
     }
-    else
-    {
-        brNode1 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
-        brNode2 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
-    }
+
     brNode1->connect(brNode2);
     brNode1->connect(another->m_elNode);
     brNode2->connect(m_erNode);
     brNode2->connect(another->m_erNode);
 
     m_blNode->disconnect(m_elNode);
-    std::shared_ptr<Node> blNode1;
-    std::shared_ptr<Node> blNode2;
-    if (m_dir.x > m_dir.y)
+
+    if (blNode1 == nullptr || blNode2 == nullptr)
     {
-        blNode1 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
-        blNode2 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
+        if (m_dir.x > m_dir.y)
+        {
+            blNode1 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
+            blNode2 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
+        }
+        else
+        {
+            blNode1 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
+            blNode2 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
+        }
     }
-    else
-    {
-        blNode1 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
-        blNode2 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
-    }
+
     blNode1->connect(blNode2);
     blNode1->connect(another->m_erNode);
     blNode2->connect(m_elNode);
     blNode2->connect(another->m_elNode);
-
-    m_intersectionNodes.push_back(brNode1);
-    m_intersectionNodes.push_back(brNode2);
-    m_intersectionNodes.push_back(blNode1);
-    m_intersectionNodes.push_back(blNode2);
 }
 
 void Road::draw(sf::RenderTarget &target, sf::RenderStates states) const
@@ -101,11 +104,6 @@ void Road::draw(sf::RenderTarget &target, sf::RenderStates states) const
     target.draw(*m_blNode);
     target.draw(*m_erNode);
     target.draw(*m_elNode);
-
-    for (const auto &node : m_intersectionNodes)
-    {
-        target.draw(*node);
-    }
 }
 
 } // namespace TrafSim

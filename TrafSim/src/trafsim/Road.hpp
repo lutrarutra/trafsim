@@ -16,7 +16,8 @@ public:
     Road(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end, float lane_width);
     Road(const Road &prev_road, const std::shared_ptr<Node> &end);
 
-    void createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos);
+    //Returns 4 intersection nodes
+    void createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos, std::shared_ptr<Node>* intersection_nodes);
 
     std::pair<sf::Vector2f, sf::Vector2f> getEndPoints() const { return {m_begin->getPos(), m_end->getPos()}; }
     std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> getLaneBeginNodes() const { return {m_brNode, m_blNode}; }
@@ -29,7 +30,6 @@ private:
 
     std::shared_ptr<Node> m_brNode, m_blNode, m_erNode, m_elNode;
     
-    std::vector<std::shared_ptr<Node>> m_intersectionNodes;
     std::vector<sf::Vertex> m_vertices;
     std::shared_ptr<Node> m_begin, m_end;
 
