@@ -14,13 +14,15 @@ class Random
 {
 public:
     Random();
-    // between low - high including low and high
+    // between low - high including low but not high
     template <typename T>
     T rand_int(T low, T high) const
     {
+        if(low >= high)
+            return high;
         return rand() % high + low;
     }
-    // between 0 - high including 0 and high
+    // between 0 - high including 0 but not high
     template <typename T>
     T rand_int(T high) const { return rand_int<T>(0, high); };
 

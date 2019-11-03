@@ -26,6 +26,11 @@ Road::Road(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end,
     init();
 }
 
+bool Road::isHorizontal() const
+{
+    return abs(m_dir.x) > abs(m_dir.y);
+}
+
 void Road::init()
 {
 
@@ -49,52 +54,87 @@ void Road::init()
 
 void Road::createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos, std::shared_ptr<Node> *intersection_nodes)
 {
-    std::shared_ptr<Node> &brNode1 = intersection_nodes[0];
-    std::shared_ptr<Node> &brNode2 = intersection_nodes[1];
-    std::shared_ptr<Node> &blNode1 = intersection_nodes[2];
-    std::shared_ptr<Node> &blNode2 = intersection_nodes[3];
+    // intersection nodes top left, torright, bot right, bot left.
+    std::shared_ptr<Node> &tlNode = intersection_nodes[0];
+    std::shared_ptr<Node> &trNode = intersection_nodes[1];
+    std::shared_ptr<Node> &brNode = intersection_nodes[2];
+    std::shared_ptr<Node> &blNode = intersection_nodes[3];
 
+    if (tlNode == nullptr)
+        tlNode = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
+
+    if (trNode == nullptr)
+        trNode = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
+
+    if (brNode == nullptr)
+        brNode = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
+
+    if (blNode == nullptr)
+        blNode = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
+
+    //Disconnect old points
     m_brNode->disconnect(m_erNode);
-
-    if (brNode1 == nullptr || brNode2 == nullptr)
-    {
-        if (m_dir.x > m_dir.y)
-        {
-            brNode1 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
-            brNode2 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
-        }
-        else
-        {
-            brNode1 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
-            brNode2 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
-        }
-    }
-
-    brNode1->connect(brNode2);
-    brNode1->connect(another->m_elNode);
-    brNode2->connect(m_erNode);
-    brNode2->connect(another->m_erNode);
-
     m_blNode->disconnect(m_elNode);
 
-    if (blNode1 == nullptr || blNode2 == nullptr)
+    //Connect them to new nodes
+
+    if (isHorizontal())
     {
-        if (m_dir.x > m_dir.y)
+        // ->
+        if (m_dir.x > 0)
         {
-            blNode1 = std::make_shared<Node>(sf::Vector2f(pos.x + m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
-            blNode2 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
+            m_brNode->connect(blNode);
+            m_blNode->connect(trNode);
         }
+        // <-
         else
         {
-            blNode1 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y - m_lanewidth * 0.5f));
-            blNode2 = std::make_shared<Node>(sf::Vector2f(pos.x - m_lanewidth * 0.5f, pos.y + m_lanewidth * 0.5f));
+            m_brNode->connect(trNode);
+            m_blNode->connect(blNode);
+        }
+    }
+    else
+    {
+        // v
+        if (m_dir.y > 0)
+        {
+            m_brNode->connect(tlNode);
+            m_blNode->connect(brNode);
+        }
+        // ^
+        else
+        {
+            m_brNode->connect(brNode);
+            m_blNode->connect(tlNode);
         }
     }
 
-    blNode1->connect(blNode2);
-    blNode1->connect(another->m_erNode);
-    blNode2->connect(m_elNode);
-    blNode2->connect(another->m_elNode);
+    if (isHorizontal())
+    {
+        if (m_dir.x > 0)
+        {
+            tlNode->connect(m_elNode);
+            brNode->connect(m_erNode);
+        }
+        else
+        {
+            tlNode->connect(m_erNode);
+            brNode->connect(m_elNode);
+        }
+    }
+    else
+    {
+        if (m_dir.y > 0)
+        {
+            trNode->connect(m_elNode);
+            blNode->connect(m_erNode);
+        }
+        else
+        {
+            trNode->connect(m_erNode);
+            blNode->connect(m_elNode);
+        }
+    }
 }
 
 void Road::draw(sf::RenderTarget &target, sf::RenderStates states) const

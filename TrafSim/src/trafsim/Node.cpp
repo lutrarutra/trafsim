@@ -29,7 +29,7 @@ void Node::draw(sf::RenderTarget &target, sf::RenderStates states) const
     target.draw(c);
 }
 
-void Node::connect(std::shared_ptr<Node> &another)
+void Node::connect(std::shared_ptr<Node> another)
 {
     m_neighbors.push_back(another);
 }

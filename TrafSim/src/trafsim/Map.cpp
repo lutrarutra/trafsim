@@ -24,6 +24,10 @@ void Map::addCar(const sf::Vector2f &pos)
         node = lane_begins.first;
     else
         node = lane_begins.second;
+
+    std::cout << node->getNeighbors().size() << "\n";
+    std::cout << node->getNeighbors()[0]->getNeighbors().size() << "\n";
+    std::cout << node->getPos().x << " " << node->getPos().y << "\n";
     Car car(node, node->getNeighbors()[0], {80.f, 80.f});
     m_cars.push_back(car);
 }

@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "trafsim/Node.hpp"
+#include "util/Random.hpp"
 
 namespace TrafSim
 {
@@ -14,8 +15,10 @@ public:
 
     void update(float delta_time);
     void findRoute();
+    bool finishedRoute() const { return m_finishedRoute; }
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+
 private:
     sf::RectangleShape m_rect;
     // p node as previous node t node as target node, n node as next node
@@ -27,7 +30,8 @@ private:
     float m_v, m_a;
 
     std::vector<unsigned int> m_route;
-    
+
+    bool m_finishedRoute = false;
 };
 
-};
+}; // namespace TrafSim

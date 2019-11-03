@@ -17,11 +17,13 @@ public:
     Road(const Road &prev_road, const std::shared_ptr<Node> &end);
 
     //Returns 4 intersection nodes
-    void createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos, std::shared_ptr<Node>* intersection_nodes);
+    void createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos, std::shared_ptr<Node> *intersection_nodes);
 
     std::pair<sf::Vector2f, sf::Vector2f> getEndPoints() const { return {m_begin->getPos(), m_end->getPos()}; }
-    std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> getLaneBeginNodes() const { return {m_brNode, m_blNode}; }
-    
+    std::pair<std::shared_ptr<Node>, std::shared_ptr<Node>> getLaneBeginNodes() const { return {m_brNode, m_blNode}; }
+    std::pair<std::shared_ptr<Node>, std::shared_ptr<Node>> getLaneEndNodes() const { return {m_erNode, m_elNode}; }
+    sf::Vector2f getDir() const { return m_dir; }
+    bool isHorizontal() const;
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
@@ -29,7 +31,7 @@ private:
     void init();
 
     std::shared_ptr<Node> m_brNode, m_blNode, m_erNode, m_elNode;
-    
+
     std::vector<sf::Vertex> m_vertices;
     std::shared_ptr<Node> m_begin, m_end;
 
