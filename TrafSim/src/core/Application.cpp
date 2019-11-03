@@ -35,11 +35,14 @@ void Application::run(const char *argv)
     auto n1 = std::make_shared<Node>(sf::Vector2f(1500, 500));
     auto n2 = std::make_shared<Node>(sf::Vector2f(1500, 1500));
 
+    auto n5 = std::make_shared<Node>(sf::Vector2f(1500, 2000));
+
     auto n3 = std::make_shared<Node>(sf::Vector2f(1000, 1000));
     auto n4 = std::make_shared<Node>(sf::Vector2f(2000, 1000));
 
 
     n1->connect(n2);
+    n2->connect(n5);
     n3->connect(n4);
     m_map.createRoads(n1);
     m_map.createRoads(n3);

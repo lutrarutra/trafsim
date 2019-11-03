@@ -24,7 +24,7 @@ private:
     // p node as previous node t node as target node, n node as next node
     // from p node to t node via n node
     std::shared_ptr<Node> m_pNode, m_tNode, m_nNode;
-    const sf::Vector2f size;
+    sf::Vector2f size;
     sf::Vector2f m_pos;
     //Velocity and acceleration
     float m_v, m_a;

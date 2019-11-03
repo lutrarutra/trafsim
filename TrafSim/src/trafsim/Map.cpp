@@ -9,18 +9,24 @@ Map::Map()
 
 void Map::update(float delta_time)
 {
+    removeFinishedCars();
+    if(m_cars.size() == 0)
+    {
+        Random r;
+        addCar(sf::Vector2f(r.rand_int(4000), r.rand_int(4000)));
+    }
     for (auto &car : m_cars)
     {
         car.update(delta_time);
     }
-}
+} // namespace TrafSim
 
 void Map::addCar(const sf::Vector2f &pos)
 {
     auto closest_road = findClosestRoad(pos);
     auto lane_begins = closest_road->getLaneBeginNodes();
     std::shared_ptr<Node> node;
-    if (lane_begins.first->getNeighbors().size() > 0)
+    if (VectorMath::Distance(pos, lane_begins.first->getPos()) < VectorMath::Distance(pos, lane_begins.second->getPos()))
         node = lane_begins.first;
     else
         node = lane_begins.second;
@@ -28,8 +34,12 @@ void Map::addCar(const sf::Vector2f &pos)
     std::cout << node->getNeighbors().size() << "\n";
     std::cout << node->getNeighbors()[0]->getNeighbors().size() << "\n";
     std::cout << node->getPos().x << " " << node->getPos().y << "\n";
-    Car car(node, node->getNeighbors()[0], {80.f, 80.f});
-    m_cars.push_back(car);
+    m_cars.push_back({node, node->getNeighbors()[0], {80.f, 80.f}});
+}
+
+void Map::removeFinishedCars()
+{
+    m_cars.erase(std::remove_if(m_cars.begin(), m_cars.end(), [](const auto &car) { return car.finishedRoute(); }), m_cars.end());
 }
 
 const std::shared_ptr<Road> Map::findClosestRoad(const sf::Vector2f &pos)
@@ -91,7 +101,7 @@ void Map::constructRoads(const std::shared_ptr<Node> &cur, std::shared_ptr<Road>
     }
 }
 
-void Map::createRoads(const std::shared_ptr<Node>& begin)
+void Map::createRoads(const std::shared_ptr<Node> &begin)
 {
     Road *road = nullptr;
     std::shared_ptr<Node> cur = begin;
@@ -109,5 +119,4 @@ void Map::draw(Window &window) const
     for (const auto &car : m_cars)
         window.draw(car);
 }
-
 }; // namespace TrafSim

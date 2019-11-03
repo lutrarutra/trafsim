@@ -23,6 +23,7 @@ public:
 
     //Entity handling
     void addCar(const sf::Vector2f &pos);
+    void removeFinishedCars();
     void createRoads(const std::shared_ptr<Node>& begin);
     void checkIntersections();
     const std::shared_ptr<Road> findClosestRoad(const sf::Vector2f &pos);

@@ -22,7 +22,6 @@ Road::Road(const std::shared_ptr<Node> &begin, const std::shared_ptr<Node> &end,
 
     m_brNode = std::make_shared<Node>(m_begin->getPos() + pdir * m_lanewidth * 0.5f, sf::Color::Blue);
     m_blNode = std::make_shared<Node>(m_end->getPos() - pdir * m_lanewidth * 0.5f, sf::Color::Blue);
-
     init();
 }
 
@@ -85,12 +84,18 @@ void Road::createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos, s
         {
             m_brNode->connect(blNode);
             m_blNode->connect(trNode);
+            //Intersection nodes
+            tlNode->connect(m_elNode);
+            brNode->connect(m_erNode);
         }
         // <-
         else
         {
             m_brNode->connect(trNode);
             m_blNode->connect(blNode);
+            //Intersection nodes
+            tlNode->connect(m_erNode);
+            brNode->connect(m_elNode);
         }
     }
     else
@@ -100,37 +105,16 @@ void Road::createIntersection(std::shared_ptr<Road> another, sf::Vector2f pos, s
         {
             m_brNode->connect(tlNode);
             m_blNode->connect(brNode);
+            //Intersection nodes
+            trNode->connect(m_elNode);
+            blNode->connect(m_erNode);
         }
         // ^
         else
         {
             m_brNode->connect(brNode);
             m_blNode->connect(tlNode);
-        }
-    }
-
-    if (isHorizontal())
-    {
-        if (m_dir.x > 0)
-        {
-            tlNode->connect(m_elNode);
-            brNode->connect(m_erNode);
-        }
-        else
-        {
-            tlNode->connect(m_erNode);
-            brNode->connect(m_elNode);
-        }
-    }
-    else
-    {
-        if (m_dir.y > 0)
-        {
-            trNode->connect(m_elNode);
-            blNode->connect(m_erNode);
-        }
-        else
-        {
+            //Intersection nodes
             trNode->connect(m_erNode);
             blNode->connect(m_elNode);
         }
