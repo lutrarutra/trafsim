@@ -42,7 +42,6 @@ void Application::run(const char *argv)
 
 
     n1->connect(n2);
-    n2->connect(n5);
     n3->connect(n4);
     m_map.createRoads(n1);
     m_map.createRoads(n3);

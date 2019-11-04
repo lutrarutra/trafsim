@@ -14,22 +14,23 @@ Node::Node(const sf::Vector2f &pos, sf::Color color)
 
 void Node::disconnect(const std::shared_ptr<Node> &node)
 {
-    for (auto it = m_neighbors.begin(); it != m_neighbors.end(); ++it)
-    {
-        if (node == *it)
-        {
-            m_neighbors.erase(it);
-            return;
-        }
-    }
+    m_neighbors.erase(std::remove_if(m_neighbors.begin(), m_neighbors.end(), [&node](const auto& n) -> bool { return n == node; }), m_neighbors.end());
+    // for (auto it = m_neighbors.begin(); it != m_neighbors.end(); ++it)
+    // {
+    //     if (node == *it)
+    //     {
+    //         m_neighbors.erase(it);
+    //         return;
+    //     }
+    // }
 }
 
 void Node::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    target.draw(c);
+    target.draw(c, states);
 }
 
-void Node::connect(std::shared_ptr<Node> another)
+void Node::connect(const std::shared_ptr<Node> &another)
 {
     m_neighbors.push_back(another);
 }

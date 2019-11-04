@@ -30,7 +30,7 @@ public:
 
 private:
     // Constructs roads from nodes using recursive DFS algorithm to iterate over node graph
-    void constructRoads(const std::shared_ptr<Node> &cur, std::shared_ptr<Road> prevRoad, std::map<std::shared_ptr<Node>, bool> &visited);
+    void constructRoads(const std::shared_ptr<Node> &cur, const std::shared_ptr<Road> &prevRoad, std::map<std::shared_ptr<Node>, bool> &visited);
 
     std::vector<std::shared_ptr<Road>> m_roads;
     std::vector<Car> m_cars;

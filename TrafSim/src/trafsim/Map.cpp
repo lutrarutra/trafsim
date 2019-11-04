@@ -85,7 +85,7 @@ void Map::checkIntersections()
     }
 }
 
-void Map::constructRoads(const std::shared_ptr<Node> &cur, std::shared_ptr<Road> prevRoad, std::map<std::shared_ptr<Node>, bool> &visited)
+void Map::constructRoads(const std::shared_ptr<Node> &cur, const std::shared_ptr<Road>& prevRoad, std::map<std::shared_ptr<Node>, bool> &visited)
 {
     if (visited[cur])
         return;

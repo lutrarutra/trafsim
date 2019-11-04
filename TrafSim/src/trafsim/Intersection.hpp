@@ -7,7 +7,7 @@ namespace TrafSim
 class Intersection : public sf::Drawable
 {
 public:
-    Intersection(std::shared_ptr<Road> &road1, std::shared_ptr<Road> &road2, const sf::Vector2f& pos);
+    Intersection(const std::shared_ptr<Road> &road1, const std::shared_ptr<Road> &road2, const sf::Vector2f& pos);
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
