@@ -1,0 +1,15 @@
+prefix=/home/jonathan/Downloads/SFML-2.5.1-Compiled
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: SFML-graphics
+Description: The Simple and Fast Multimedia Library, graphics module.
+URL: http://www.sfml-dev.org
+Version: 2.5.1
+Requires: sfml-window
+Requires.private: sfml-system, freetype2
+Libs: -L${libdir} -lsfml-graphics
+# gl may not be in pkg-config
+Libs.private: /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLU.so
+Cflags: -I${includedir}
