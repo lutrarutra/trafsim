@@ -13,7 +13,8 @@ Traffic simulator implemented in C++
 
 ## Working enviroments
 
-* Unix including Mac OS, Windows will probably work but you will have to figure out how to build this yourself
+* Unix including Mac OS
+* Windows will probably work but you will have to figure out how to build this yourself
 
 
 ## How to build?
