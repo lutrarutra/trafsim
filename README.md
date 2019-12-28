@@ -2,7 +2,7 @@
 
 Traffic simulator implemented in C++
 
-![] (https://media.giphy.com/media/ifXVEva4ksUVCz5vRn/giphy.gif)
+![](https://media.giphy.com/media/ifXVEva4ksUVCz5vRn/giphy.gif)
 
 
 ## Dependencies
@@ -14,6 +14,7 @@ Traffic simulator implemented in C++
 ## Working enviroments
 
 * Unix including Mac OS
+* Windows will probably work but you will have to figure out how to build this yourself
 
 
 ## How to build?
