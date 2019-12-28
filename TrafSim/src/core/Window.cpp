@@ -1,134 +1,103 @@
 #include "Window.hpp"
 
+#include "imgui.h"
+#include "imgui-SFML.h"
+#include "imgui_internal.h"
+
 #include "Application.hpp"
-#include "GUI.hpp"
 
-namespace TrafSim
+namespace ts
 {
 
-Window::Window(int width, int height, const std::string &title, const sf::ContextSettings &settings)
-    : m_window(sf::VideoMode(width, height), title, sf::Style::Default, settings), m_mapView(sf::View(sf::FloatRect(0, 0, width, height))),
-      m_clearColor(sf::Color::Black)
+Window::Window()
+    : window_(sf::VideoMode(1920, 1080), "Traffic Simulator", sf::Style::Default, sf::ContextSettings(0, 0, 8)),
+      view_(sf::View(sf::FloatRect(0, 0, sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height)))
 {
-    m_window.setView(m_mapView);
-    //If turned on, it will limit fps to 60
-    m_window.setVerticalSyncEnabled(true);
-    ImGui::SFML::Init(m_window);
-    m_window.resetGLStates();
-    ImGui::SFML::Update(m_window, m_clock.restart());
-    ImGui::SFML::Render(m_window);
-    ImGui::GetFont()->Scale = 3.0f;
+    window_.setView(view_);
+    window_.setVerticalSyncEnabled(true);
+    ImGui::SFML::Init(window_);
+    window_.resetGLStates();
+    ImGui::SFML::Update(window_, clock_.restart());
+    ImGui::SFML::Render(window_);
+    ImGui::GetFont()->Scale = 2.0f;
 }
 
-void Window::moveViewWithMouse(const sf::Vector2i &delta_mp)
+bool Window::isGuiHovered() const
 {
-    m_mapView.move(delta_mp.x * m_zoom, delta_mp.y * m_zoom);
-    m_window.setView(m_mapView);
-}
-
-void Window::zoomView(sf::Vector2i relative_to, float zoom_dir)
-{
-    std::cout << m_zoom << "\n";
-    if (zoom_dir == 0)
-        return;
-    const sf::Vector2f beforeCoord{m_window.mapPixelToCoords(relative_to)};
-    const float zoomfactor = 1.1f;
-    m_zoom = m_zoom * (zoom_dir < 0 ? zoomfactor : 1.f / zoomfactor);
-    m_mapView.setSize(m_window.getSize().x * m_zoom, m_window.getSize().y * m_zoom);
-    m_window.setView(m_mapView);
-    const sf::Vector2f afterCoord{m_window.mapPixelToCoords(relative_to)};
-    const sf::Vector2f offsetCoords{beforeCoord - afterCoord};
-    m_mapView.move(offsetCoords);
-    m_window.setView(m_mapView);
-}
-
-bool Window::isVisible(const sf::Vector2f &point, float offscreen) const
-{
-    sf::Vector2i convertedPoint = convert(point);
-    const int minx = getWidth() * (1 - offscreen);
-    const int miny = getHeight() * (1 - offscreen);
-    const int maxx = getWidth() * offscreen;
-    const int maxy = getHeight() * offscreen;
-    return (convertedPoint.x > minx && convertedPoint.x < maxx && convertedPoint.y > miny && convertedPoint.y < maxy);
-}
-
-void Window::setClearColor(const sf::Color &color)
-{
-    m_clearColor = color;
+    return ImGui::GetIO().WantCaptureMouse;
 }
 
 void Window::clear()
 {
-    ImGui::SFML::Update(m_window, m_clock.restart());
-    m_window.clear(m_clearColor);
-}
-
-void Window::draw(const sf::Drawable &shape)
-{
-    m_window.draw(shape);
+    ImGui::SFML::Update(window_, clock_.restart());
+    window_.clear();
 }
 
 void Window::display()
 {
-    ImGui::SFML::Render(m_window);
-    m_window.display();
+    ImGui::SFML::Render(window_);
+    window_.display();
 }
 
-void Window::moveView(int dx, int dy)
-{
-    //Higher sensivity -> quicker moves
-    const float sensivity = 0.5f;
-    dx *= m_zoom * sensivity;
-    dy *= m_zoom * sensivity;
-    //divide dx and dy by zoom factor so when we are zoomed in it will not move so quickly
-    m_mapView.setCenter(m_mapView.getCenter().x + dx, m_mapView.getCenter().y + dy);
-    m_window.setView(m_mapView);
-}
-
-//Events
 void Window::pollEvent()
 {
     auto app = Application::GetInstance();
-    sf::Event e;
-    while (m_window.pollEvent(e))
+    sf::Event ev;
+    while (window_.pollEvent(ev))
     {
-        ImGui::SFML::ProcessEvent(e);
-        if (e.type == sf::Event::Closed)
+        ImGui::SFML::ProcessEvent(ev);
+        if (ev.type == sf::Event::Closed)
+            window_.close();
+        else if (ev.type == sf::Event::MouseWheelScrolled)
         {
-            m_window.close();
+            zoomView(sf::Vector2i(ev.mouseWheelScroll.x, ev.mouseWheelScroll.y), ev.mouseWheelScroll.delta);
         }
-        //Catch resizing
-        else if (e.type == sf::Event::Resized)
-        {
-            //When window resizes it will give us larger view of our map
-            //it does not change size of our entities on screen, we can just see more entities
-            m_mapView = sf::View(sf::FloatRect(0.f, 0.f, e.size.width, e.size.height));
-            m_window.setView(m_mapView);
-        }
-        else if (e.type == sf::Event::MouseWheelScrolled)
-        {
-            zoomView(sf::Vector2i(e.mouseWheelScroll.x, e.mouseWheelScroll.y), e.mouseWheelScroll.delta);
-            app->handleEvent(e);
-        }
-        //Mouse buttons
-        else if (e.type == sf::Event::MouseButtonPressed)
-            app->handleEvent(e);
-
-        else if (e.type == sf::Event::MouseButtonReleased)
-            app->handleEvent(e);
-
-        //Keyboard keys
-        else if (e.type == sf::Event::KeyPressed)
-            app->handleEvent(e);
-
-        else if (e.type == sf::Event::KeyReleased)
-            app->handleEvent(e);
+        app->handleEvent(ev);
     }
 }
 
-void Window::close()
+void Window::setViewPos(const sf::Vector2f &pos)
 {
-    m_window.close();
+    view_.setCenter(pos);
+    window_.setView(view_);
 }
 
-} // namespace TrafSim
+void Window::moveView(const sf::Vector2i &delta_pos)
+{
+    if (isGuiHovered())
+        return;
+    view_.move(delta_pos.x * zoom_, delta_pos.y * zoom_);
+    window_.setView(view_);
+}
+
+void Window::setZoom(float zoom)
+{
+    zoom_ = zoom;
+    view_.setSize(window_.getSize().x * zoom_, window_.getSize().y * zoom_);
+    window_.setView(view_);
+}
+
+
+void Window::zoomView(const sf::Vector2i &relative_to, float zoom_dir)
+{
+    if (zoom_dir == 0 || isGuiHovered())
+        return;
+    const sf::Vector2f beforeCoord{window_.mapPixelToCoords(relative_to)};
+    const float zoomfactor = 1.1f;
+    float old_zoom = zoom_;
+    zoom_ = zoom_ * (zoom_dir < 0 ? zoomfactor : 1.f / zoomfactor);
+    // Max zoom
+    if(zoom_ < 0.5 || zoom_ > 5)
+    {
+        zoom_ = old_zoom;
+        return;
+    }
+    view_.setSize(window_.getSize().x * zoom_, window_.getSize().y * zoom_);
+    window_.setView(view_);
+    const sf::Vector2f afterCoord{window_.mapPixelToCoords(relative_to)};
+    const sf::Vector2f offsetCoords{beforeCoord - afterCoord};
+    view_.move(offsetCoords);
+    window_.setView(view_);
+}
+
+} // namespace ts

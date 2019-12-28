@@ -1,46 +1,52 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-
 #include <SFML/Graphics.hpp>
 
-namespace TrafSim
+namespace ts
 {
 class Window
 {
 public:
-    Window(int width, int height, const std::string &title, const sf::ContextSettings &settings);
-    void setClearColor(const sf::Color &color);
-    void pollEvent();
-    void moveViewWithMouse(const sf::Vector2i &delta_mp);
-    void moveView(int dx, int dy);
+    Window();
 
     //Getters
-    unsigned int getWidth() const { return m_window.getSize().x; }
-    unsigned int getHeight() const { return m_window.getSize().y; }
-    const sf::Color &getClearColor() const { return m_clearColor; }
-    bool isOpen() const { return m_window.isOpen(); }
-    sf::Vector2i convert(const sf::Vector2f &point) const { return m_window.mapCoordsToPixel(point); }
-    bool isVisible(const sf::Vector2f &point, float offsreen = 1.f) const;
-    float getZoom() const { return m_zoom; }
+    const sf::Window &getWindow() const { return window_; }
+    const sf::View &getView() const { return view_; }
+    int getWidth() const { return window_.getSize().x; }
+    int getHeight() const { return window_.getSize().y; }
+    bool isOpen() const { return window_.isOpen(); }
+    bool isGuiHovered() const;
 
-    //rendering stuff
-    void draw(const sf::Drawable &obj);
+    // Converts point on map to point on screen (coordinate -> pixel)
+    sf::Vector2i convert(const sf::Vector2f &point) const { return window_.mapCoordsToPixel(point); }
+    // Converts point on screen to point on map (pixel -> coordinate)
+    sf::Vector2f convert(const sf::Vector2i &point) const { return window_.mapPixelToCoords(point); }
+
+    // moves view when left mb is pressed and moved
+    void moveView(const sf::Vector2i &delta_pos);
+    // For moving map with heatmap
+    void setViewPos(const sf::Vector2f &pos);
+
+    void setZoom(float zoom);
+
+
+    // polls events from SFML
+    void pollEvent();
+
+    // For rendering stuff on the screen
+    void draw(const sf::Drawable &obj) { window_.draw(obj); };
     void clear();
     void display();
-    void close();
+
+    int gui_zoom_index = 3;
 
 private:
-    void zoomView(sf::Vector2i relative_to, float zoom);
+    void zoomView(const sf::Vector2i &relative_to, float zoom);
 
 private:
-    sf::RenderWindow m_window;
-    sf::View m_mapView;
-    sf::Color m_clearColor;
-    sf::Clock m_clock;
-    float m_zoom = 1;
-    char m_title[255];
+    sf::RenderWindow window_;
+    sf::Clock clock_;
+    sf::View view_;
+    float zoom_ = 1.f;
 };
-
-} // namespace TrafSim
+} // namespace ts

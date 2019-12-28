@@ -19,7 +19,7 @@ set(CMAKE_CXX_STANDARD 14)
 file(GLOB SOURCES src/*.cpp)
 file(GLOB CORE src/core/*.cpp)
 file(GLOB UTILS src/util/*.cpp)
-file(GLOB TRAFSIM src/trafsim/*.cpp)
+file(GLOB TRAFSIM src/trafficsim/*.cpp)
 set(IMGUI_SOURCES deps/imgui/imgui.cpp deps/imgui/imgui_widgets.cpp deps/imgui/imgui_draw.cpp deps/imgui/imgui_demo.cpp deps/imgui-sfml/imgui-SFML.cpp)
 #set(TRACY_SOURCES deps/tracy/TracyClient.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES} ${TRAFSIM} ${CORE} ${UTILS} ${IMGUI_SOURCES})
@@ -32,11 +32,39 @@ set (CMAKE_CXX_FLAGS "-g -W -pedantic")
 include_directories(src)
 include_directories(src/core)
 include_directories(src/util)
-include_directories(src/trafsim)
+include_directories(src/trafficsim)
 
 # Additional resources like images and fonts
-# configure_file(res/OpenSans-Regular.ttf OpenSans-Regular.ttf COPYONLY)
-configure_file(res/worldmap.png worldmap.png COPYONLY)
+configure_file(res/texture_list.txt texture_list.txt COPYONLY)
+
+configure_file(res/car/blue_car.png blue_car.png COPYONLY)
+configure_file(res/car/brown_car.png brown_car.png COPYONLY)
+configure_file(res/car/green_car.png green_car.png COPYONLY)
+configure_file(res/car/grey_car.png grey_car.png COPYONLY)
+configure_file(res/car/red_car.png red_car.png COPYONLY)
+configure_file(res/car/teal_car.png teal_car.png COPYONLY)
+configure_file(res/car/white_car.png white_car.png COPYONLY)
+
+configure_file(res/home_building.png home_building.png COPYONLY)
+configure_file(res/office_building.png office_building.png COPYONLY)
+
+configure_file(res/home_road.png home_road.png COPYONLY)
+
+configure_file(res/straight_road.png straight_road.png COPYONLY)
+
+configure_file(res/right_turn.png right_turn.png COPYONLY)
+configure_file(res/left_turn.png left_turn.png COPYONLY)
+
+configure_file(res/right_intersection.png right_intersection.png COPYONLY)
+configure_file(res/left_intersection.png left_intersection.png COPYONLY)
+
+configure_file(res/right_trisection.png right_trisection.png COPYONLY)
+configure_file(res/left_trisection.png left_trisection.png COPYONLY)
+
+configure_file(res/right_junction.png right_junction.png COPYONLY)
+configure_file(res/left_junction.png left_junction.png COPYONLY)
+
+configure_file(res/map1.csv map1.csv COPYONLY)
 
 # Find sfml and link it
 # if you want to move sfml folder into another folder 

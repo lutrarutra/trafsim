@@ -1,0 +1,20 @@
+blue_car blue_car.png
+brown_car brown_car.png
+green_car green_car.png
+grey_car grey_car.png
+red_car red_car.png
+teal_car teal_car.png
+white_car white_car.png
+
+left_intersection left_intersection.png
+right_intersection right_intersection.png
+left_junction left_junction.png
+right_junction right_junction.png
+left_turn left_turn.png
+right_turn right_turn.png
+right_trisection right_trisection.png
+left_trisection left_trisection.png
+straight_road straight_road.png
+home_road home_road.png
+home_building home_building.png
+office_building office_building.png
