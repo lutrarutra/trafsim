@@ -2,6 +2,8 @@
 
 Traffic simulator implemented in C++
 
+Demo video: https://youtu.be/TYzOSeK_qxM?t=178
+
 ![](https://media.giphy.com/media/ifXVEva4ksUVCz5vRn/giphy.gif)
 
 
