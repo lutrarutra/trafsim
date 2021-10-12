@@ -22,12 +22,14 @@ Project template: <https://github.com/lutrarutra/SFML-Project-Template>
 
 ## How to build?
 
-1. Clone `git clone --recursive https://github.com/lutrarutra/trafsim`
+1. Clone `git clone https://github.com/lutrarutra/trafsim`
 2. Create build directory inside of the project folder: `mkdir build`
 3. Open navigate into new "build" folder with terminal: `cd build`
 4. Generate makefile with CMake: `cmake ..`
 5. Build generated makefile: `make`
 6. Run it: `./a`
+
+Refer to <https://github.com/lutrarutra/SFML-Project-Template>
 
 
 ## Libraries used
