@@ -1,9 +1,0 @@
-[submodule "TrafSim/deps/tracy"]
-	path = TrafSim/deps/tracy
-	url = https://github.com/Leandros/tracy
-[submodule "TrafSim/deps/imgui"]
-	path = TrafSim/deps/imgui
-	url = https://github.com/ocornut/imgui
-[submodule "TrafSim/deps/imgui-sfml"]
-	path = TrafSim/deps/imgui-sfml
-	url = https://github.com/eliasdaler/imgui-sfml
