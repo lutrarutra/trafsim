@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "osx": {
+                "MIMode": "lldb",
+            },
+            "windows": {
+                "MIMode": "gdb",
+            },
+            "linux": {
+                "MIMode": "gdb",
+            },
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/a",
+            "cwd": "${workspaceFolder}/build",
+            "preLaunchTask": "make",
+            "args": [],
+            "externalConsole": false,
+            "environment": [],
+        }
+    ]
+}

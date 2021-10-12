@@ -4,10 +4,19 @@
         {
             "label": "make",
             "type": "shell",
-            "command": "make",
+            "windows" :{
+                "command": "mingw32-make.exe"
+            },
+            "linux" :{
+                "command" : "make"
+            },
+            "osx" :{
+                "command" : "make"
+            },
             "options": {
                 "cwd": "${workspaceFolder}/build"
             },
+            "problemMatcher": [],
             "group": {
                 "kind": "build",
                 "isDefault": true

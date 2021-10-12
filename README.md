@@ -6,6 +6,7 @@ Demo video: https://youtu.be/TYzOSeK_qxM?t=178
 
 ![](https://media.giphy.com/media/ifXVEva4ksUVCz5vRn/giphy.gif)
 
+Project template: <https://github.com/lutrarutra/SFML-Project-Template>
 
 ## Dependencies
 
